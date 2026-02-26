@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Print</title>
+  <link rel="stylesheet" href="/print/print.css" />
+</head>
+<body>
+
+<div class="receipt">
+
+  <!-- ELEMENT 1: HEADER -->
+  <section class="header">
+    <p class="subtitle">국내 다양한 서점사업 이용이 가능한</p>
+    <h1 class="title">이노스페이스원<br/>이북리더기!</h1>
+  </section>
+
+  <!-- ELEMENT 2: DEVICE (ONE ONLY) -->
+  <section class="device">
+    <img id="device-img" src="/img/print/luna.png" alt="device" />
+    <p class="device-name">LUNA</p>
+    <p class="device-desc">화이트 감성이 더해진<br/>6인치 루나</p>
+  </section>
+
+  <!-- ELEMENT 3: FOOTER -->
+  <section class="footer">
+    <img src="/img/print/logo.png" class="logo" />
+    <div class="qr">
+      <img src="/img/print/qr.png" />
+      <p>공식 홈페이지<br/>다양한 혜택받기</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  window.print();
+
+  // when printing finishes → restart kiosk
+  window.onafterprint = () => {
+    window.location.href = "/";
+  };
+
+  // fallback (some printers don’t fire onafterprint)
+  setTimeout(() => {
+    window.location.href = "/";
+  }, 3000);
+</script>
+
+</body>
+</html>
