@@ -76,14 +76,22 @@ function showResult() {
   }
 
   app.innerHTML = `
-    <div class="result">
-      <h1>TYPE ${type}</h1>
-      <img class="type-img" src="${result.typeImage}" />
-      <h2>${result.title}</h2>
-      <img class="device-img" src="${result.deviceImage}" />
-      <p>${result.description}</p>
-      <button onclick="printResult('${type}')">PRINT</button>
-      <button onclick="reset()">RESTART</button>
+    <div class="screen result-screen">
+      <header class="top">
+        <img src="/img/logo.png" class="logo" />
+      </header>
+
+      <section class="result-area">
+        <div class="result-title">${result.title}</div>
+        <img class="result-type-img" src="${result.typeImage}" />
+        <p class="result-desc">${result.description}</p>
+        <img class="result-device-img" src="${result.deviceImage}" />
+      </section>
+
+      <section class="result-actions">
+        <button class="btn pill primary" onclick="printResult('${type}')">티켓 출력하기</button>
+<button class="btn pill secondary" onclick="reset()">다시 시작</button>
+      </section>
     </div>
   `;
 }

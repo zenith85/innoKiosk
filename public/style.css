@@ -90,3 +90,92 @@ body {
   max-width: 80%;
   object-fit: contain;
 }
+
+/* RESULT SCREEN */
+
+.result-area {
+  text-align: center;
+  padding: 80px 120px 40px;
+}
+
+.result-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+.result-type-img {
+  max-width: 90vw;
+  max-height: 35vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 20px auto;
+    border-radius: 24px;
+  overflow: hidden;
+}
+
+.result-desc {
+  font-size: 22px;
+  line-height: 1.5;
+  margin: 30px auto;
+  max-width: 900px;
+}
+
+.result-device-img {
+  max-width: 60vw;
+  max-height: 25vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 20px auto;
+    border-radius: 18px;
+  overflow: hidden;
+}
+
+.result-actions {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding-bottom: 60px;
+}
+
+.btn {
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* pill shape */
+.btn.pill {
+  padding: 24px 80px;
+  border-radius: 999px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* main button */
+.btn.primary {
+  background: #14233b;
+  color: #fff;
+}
+
+/* secondary (optional) */
+.btn.secondary {
+  background: #e6e6e6;
+  color: #111;
+}
+
+/* touch feedback */
+.btn:active {
+  transform: scale(0.97);
+}
+
+.result-img-wrap {
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
