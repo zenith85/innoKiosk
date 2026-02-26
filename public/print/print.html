@@ -18,8 +18,10 @@
   <!-- ELEMENT 2: DEVICE (ONE ONLY) -->
   <section class="device">
     <img id="device-img" src="/img/print/luna.png" alt="device" />
-    <p class="device-name">LUNA</p>
-    <p class="device-desc">화이트 감성이 더해진<br/>6인치 루나</p>
+    <p id="device-name" class="device-name">LUNA</p>
+    <p id="device-desc" class="device-desc">
+      화이트 감성이 더해진<br/>6인치 루나
+    </p>
   </section>
 
   <!-- ELEMENT 3: FOOTER -->
@@ -34,14 +36,52 @@
 </div>
 
 <script>
+  /* ================= DEVICE MAP ================= */
+
+  const DEVICE_MAP = {
+    A: {
+      img: "/img/print/luna.png",
+      name: "LUNA",
+      desc: "화이트 감성이 더해진<br/>6인치 루나"
+    },
+    B: {
+      img: "/img/print/lunax.png",
+      name: "LUNA X",
+      desc: "강력한 성능의<br/>6인치 루나X"
+    },
+    C: {
+      img: "/img/print/mars.png",
+      name: "MARS",
+      desc: "몰입형 대화면<br/>7인치 마스"
+    },
+    D: {
+      img: "/img/print/mars10.png",
+      name: "MARS10",
+      desc: "작업까지 가능한<br/>10인치 마스10"
+    }
+  };
+
+  /* ================= TYPE → DEVICE ================= */
+
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get("type") || "";
+
+  // rule: use LAST answer letter
+  const key = type.slice(-1);
+  const device = DEVICE_MAP[key] || DEVICE_MAP.A;
+
+  document.getElementById("device-img").src = device.img;
+  document.getElementById("device-name").innerHTML = device.name;
+  document.getElementById("device-desc").innerHTML = device.desc;
+
+  /* ================= PRINT & RESTART ================= */
+
   window.print();
 
-  // when printing finishes → restart kiosk
   window.onafterprint = () => {
     window.location.href = "/";
   };
 
-  // fallback (some printers don’t fire onafterprint)
   setTimeout(() => {
     window.location.href = "/";
   }, 3000);

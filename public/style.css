@@ -55,7 +55,7 @@ body {
   flex: 1;
   background: #14233b;
   color: #fff;
-  padding: 60px;
+  padding: 60px 0px 60px 0px;
   text-align: center;
   cursor: pointer;
   display: flex;
@@ -86,8 +86,8 @@ body {
 }
 
 .choice-img img {
-  max-height: 260px;
-  max-width: 80%;
+  max-height: 420;
+  max-width: 100%;
   object-fit: contain;
 }
 

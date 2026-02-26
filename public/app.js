@@ -7,9 +7,14 @@ let answers = [];
 
 const app = document.getElementById("app");
 
+// use this when you want to add randomness to the equation
+// function pickVariant(base) {
+//   const v = Math.random() < 0.5 ? 1 : 2;
+//   return `${base}_${v}.png`;
+// }
+
 function pickVariant(base) {
-  const v = Math.random() < 0.5 ? 1 : 2;
-  return `${base}_${v}.jpeg`;
+  return `${base}_1.png`;
 }
 
 async function loadData() {
