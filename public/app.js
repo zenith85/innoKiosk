@@ -1,3 +1,5 @@
+// public/app.js
+
 let questions = [];
 let mapping = {};
 let current = 0;
@@ -18,13 +20,22 @@ async function loadData() {
 
 function renderQuestion() {
   const q = questions[current];
+
   app.innerHTML = `
-    <div class="question">
-      <h1>${q.text}</h1>
-      <div class="choices">
+    <div class="screen">
+      <header class="top">
+        <img src="/img/logo.png" class="logo" />
+      </header>
+
+      <section class="question-area">
+        <div class="q-number">Q.${current + 1}</div>
+        <div class="q-text">${q.text}</div>
+      </section>
+
+      <section class="choices">
         ${renderChoice(q, "A")}
         ${renderChoice(q, "B")}
-      </div>
+      </section>
     </div>
   `;
 }
@@ -35,12 +46,14 @@ function renderChoice(q, key) {
 
   return `
     <div class="choice" onclick="answer('${key}')">
-      <img src="${img}" />
-      <p>${c.label}</p>
+      <div class="choice-label">${key}</div>
+      <div class="choice-text">${c.label}</div>
+      <div class="choice-img">
+        <img src="${img}" />
+      </div>
     </div>
   `;
 }
-
 
 function answer(key) {
   answers.push(key);
@@ -65,9 +78,9 @@ function showResult() {
   app.innerHTML = `
     <div class="result">
       <h1>TYPE ${type}</h1>
-      <img class="types-img" src="${result.typeImage}" />
+      <img class="type-img" src="${result.typeImage}" />
       <h2>${result.title}</h2>
-      <img class="devices-img" src="${result.deviceImage}" />
+      <img class="device-img" src="${result.deviceImage}" />
       <p>${result.description}</p>
       <button onclick="printResult('${type}')">PRINT</button>
       <button onclick="reset()">RESTART</button>
@@ -90,4 +103,3 @@ function reset() {
 }
 
 loadData();
-
