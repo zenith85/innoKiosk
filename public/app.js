@@ -96,13 +96,17 @@ function showResult() {
   `;
 }
 
-async function printResult(type) {
-  await fetch("/print", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ type })
-  });
+function printResult(type) {
+  window.open(`/print/print.html?type=${type}`, "_blank");
 }
+
+// async function printResult(type) {
+//   await fetch("/print", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ type })
+//   });
+// }
 
 function reset() {
   current = 0;
