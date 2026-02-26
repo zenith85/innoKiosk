@@ -2,6 +2,11 @@ body {
   margin: 0;
   background: #f4efe9;
   color: #111;
+  font-family:
+    "Inter",          /* English / numbers */
+    "Pretendard",     /* Korean */
+    system-ui,
+    sans-serif;
 }
 
 .screen {
@@ -16,22 +21,29 @@ body {
 }
 
 .logo {
-  height: 180px;
+  height: 140px;
 }
 
 .question-area {
   text-align: center;
-  padding: 40px 20px;
+  padding-top: 120px;
+  padding-right: 80px;
+  padding-bottom: 160px;
+  padding-left: 80px;
 }
 
 .q-number {
-  font-size: 48px;
+  font-size: 56px;
   font-weight: 700;
+    font-family: "Inter", sans-serif;
+  font-weight: 800;
 }
 
 .q-text {
-  font-size: 22px;
+  font-size: 32px;
   margin-top: 10px;
+    font-family: "Pretendard", sans-serif;
+  font-weight: 600;
 }
 
 .choices {
@@ -43,7 +55,7 @@ body {
   flex: 1;
   background: #14233b;
   color: #fff;
-  padding: 30px;
+  padding: 60px;
   text-align: center;
   cursor: pointer;
   display: flex;
@@ -52,16 +64,16 @@ body {
 }
 
 .choice + .choice {
-  border-left: 2px solid #fff;
+  border-left: 4px solid #fff;
 }
 
 .choice-label {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: bold;
 }
 
 .choice-text {
-  font-size: 18px;
+  font-size: 30px;
   line-height: 1.4;
   margin: 20px 0;
 }
