@@ -12,6 +12,22 @@ app.post("/print", (req, res) => {
   res.json({ ok: true });
 });
 
+app.post("/api/quiz-click", (req, res) => {
+
+  const fs = require("fs");
+  const statsPath = path.join(__dirname, "quiz_stats.json");
+
+  const { questionId, answerKey } = req.body;
+
+  const stats = JSON.parse(fs.readFileSync(statsPath));
+
+  stats[questionId][answerKey]++;
+
+  fs.writeFileSync(statsPath, JSON.stringify(stats, null, 2));
+
+  res.json({ ok: true });
+});
+
 app.listen(port, () => {
   console.log("SERVER RUNNING ON PORT", port);
 });

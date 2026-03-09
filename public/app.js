@@ -61,6 +61,18 @@ function renderChoice(q, key) {
 }
 
 function answer(key) {
+
+  const q = questions[current];
+
+  fetch("/api/quiz-click", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      questionId: q.id,
+      answerKey: key
+    })
+  });
+
   answers.push(key);
   current++;
 
