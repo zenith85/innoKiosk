@@ -1,16 +1,20 @@
 @page {
-  size: 80mm 170mm;
-  margin: 5mm;
+  size: 72mm 170mm;
+  margin: 4mm;
 }
 
-body {
+html, body {
   margin: 0;
-  width: 70mm;
+  width: 72mm;
+  height: 170mm;
+  overflow: hidden;
   font-family: "Pretendard", sans-serif;
 }
 
 .receipt {
-  width: 70mm;
+  width: 64mm;
+  height: 162mm;
+  overflow: hidden;
   text-align: center;
 }
 
@@ -20,12 +24,12 @@ body {
 }
 
 .subtitle {
-  font-size: 9px;
+  font-size: 13px;
   margin: 0 0 1mm;
 }
 
 .title {
-  font-size: 17px;
+  font-size: 28px;
   font-weight: 800;
   line-height: 1.2;
   margin: 0;
@@ -33,43 +37,43 @@ body {
 
 /* ELEMENT 2 */
 .device {
-  margin: 4mm 0;
+  margin: 3mm 0;
 }
 
 .device img {
-  max-height: 42mm;
-  max-width: 60mm;
+  max-height: 58mm;
+  max-width: 64mm;
   object-fit: contain;
 }
 
 .device-name {
-  font-size: 13px;
+  font-size: 20px;
   font-weight: 700;
   margin: 2mm 0 1mm;
 }
 
 .device-desc {
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.4;
   margin: 0;
 }
 
 /* ELEMENT 3 */
 .footer {
-  margin-top: 4mm;
+  margin-top: 3mm;
 }
 
 .logo {
-  height: 6mm;
+  height: 8mm;
   margin-bottom: 2mm;
 }
 
 .qr img {
-  height: 22mm;
+  height: 28mm;
 }
 
 .qr p {
-  font-size: 8px;
+  font-size: 11px;
   margin: 1.5mm 0 0;
   line-height: 1.3;
 }
