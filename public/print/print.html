@@ -36,29 +36,14 @@
 </div>
 
 <script>
-  /* ================= DEVICE MAP ================= */
+  /* ================= DEVICE DESCRIPTIONS ================= */
 
-  const DEVICE_MAP = {
-    A: {
-      img: "/img/print/luna.png",
-      name: "LUNA",
-      desc: "화이트 감성이 더해진<br/>6인치 루나"
-    },
-    B: {
-      img: "/img/print/lunax.png",
-      name: "LUNA X",
-      desc: "강력한 성능의<br/>6인치 루나X"
-    },
-    C: {
-      img: "/img/print/mars.png",
-      name: "MARS",
-      desc: "몰입형 대화면<br/>7인치 마스"
-    },
-    D: {
-      img: "/img/print/mars10.png",
-      name: "MARS10",
-      desc: "작업까지 가능한<br/>10인치 마스10"
-    }
+  const DEVICE_DESC = {
+    luna2:  "화이트 감성이 더해진<br/>6인치 루나2",
+    lunax2: "강력한 성능의<br/>6인치 루나 X2",
+    jigu:   "선명한 화면의<br/>7인치 지구",
+    comet:  "가볍고 빠른<br/>6인치 코멧",
+    marsa:  "몰입형 대화면<br/>10인치 마스 A"
   };
 
   /* ================= TYPE → DEVICE ================= */
@@ -66,25 +51,26 @@
   const params = new URLSearchParams(window.location.search);
   const type = params.get("type") || "";
 
-  // rule: use LAST answer letter
-  const key = type.slice(-1);
-  const device = DEVICE_MAP[key] || DEVICE_MAP.A;
+  const deviceImg = document.getElementById("device-img");
 
-  document.getElementById("device-img").src = device.img;
-  document.getElementById("device-name").innerHTML = device.name;
-  document.getElementById("device-desc").innerHTML = device.desc;
+  fetch("/data/mapping.json")
+    .then(r => r.json())
+    .then(mapping => {
+      const result = mapping[type];
+      if (!result) return;
 
-  /* ================= PRINT & RESTART ================= */
+      document.getElementById("device-name").innerHTML = result.title;
+      document.getElementById("device-desc").innerHTML = DEVICE_DESC[result.device] || result.title;
 
-  window.print();
+      /* ================= PRINT & RESTART ================= */
 
-  window.onafterprint = () => {
-    window.location.href = "/";
-  };
-
-  setTimeout(() => {
-    window.location.href = "/";
-  }, 3000);
+      deviceImg.onload = () => {
+        window.print();
+        window.onafterprint = () => { window.location.href = "/"; };
+        setTimeout(() => { window.location.href = "/"; }, 3000);
+      };
+      deviceImg.src = result.deviceImage;
+    });
 </script>
 
 </body>

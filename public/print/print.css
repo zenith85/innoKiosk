@@ -1,69 +1,75 @@
 @page {
-  size: A6;
-  margin: 8mm;
+  size: 80mm 170mm;
+  margin: 5mm;
 }
 
 body {
   margin: 0;
+  width: 70mm;
   font-family: "Pretendard", sans-serif;
 }
 
 .receipt {
-  width: 100%;
+  width: 70mm;
   text-align: center;
 }
 
 /* ELEMENT 1 */
 .header {
-  margin-bottom: 20px;
+  margin-bottom: 4mm;
 }
 
 .subtitle {
-  font-size: 12px;
+  font-size: 9px;
+  margin: 0 0 1mm;
 }
 
 .title {
-  font-size: 22px;
+  font-size: 17px;
   font-weight: 800;
   line-height: 1.2;
+  margin: 0;
 }
 
 /* ELEMENT 2 */
 .device {
-  margin: 30px 0;
+  margin: 4mm 0;
 }
 
 .device img {
-  max-height: 120px;
+  max-height: 42mm;
+  max-width: 60mm;
   object-fit: contain;
 }
 
 .device-name {
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 700;
-  margin-top: 10px;
+  margin: 2mm 0 1mm;
 }
 
 .device-desc {
-  font-size: 12px;
+  font-size: 10px;
   line-height: 1.4;
+  margin: 0;
 }
 
 /* ELEMENT 3 */
 .footer {
-  margin-top: 30px;
+  margin-top: 4mm;
 }
 
 .logo {
-  height: 24px;
-  margin-bottom: 10px;
+  height: 6mm;
+  margin-bottom: 2mm;
 }
 
 .qr img {
-  height: 60px;
+  height: 22mm;
 }
 
 .qr p {
-  font-size: 10px;
-  margin-top: 6px;
+  font-size: 8px;
+  margin: 1.5mm 0 0;
+  line-height: 1.3;
 }
