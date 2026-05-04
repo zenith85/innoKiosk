@@ -179,7 +179,7 @@ function showResult() {
 }
 
 function printResult(deviceCode, bookCode) {
-  window.open(`/print/print.html?device=${deviceCode}&book=${bookCode}`, "_blank");
+  window.open(`/print/print.html?device=${deviceCode}&book=${bookCode}&lang=${lang}`, "_blank");
 }
 
 function reset() {

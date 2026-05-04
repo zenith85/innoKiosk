@@ -285,6 +285,10 @@ body {
    RESULT SCREEN
    ============================================================ */
 
+.result-screen {
+  justify-content: center;
+}
+
 .result-area {
   text-align: center;
   padding: 80px 120px 40px;
