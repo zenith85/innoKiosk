@@ -56,13 +56,19 @@ app.get("/admin/api/data", (req, res) => {
 });
 
 app.post("/admin/api/questions", (req, res) => {
-  const questions = req.body;
+  const data = req.body;
   fs.writeFileSync(
     path.join(__dirname, "..", "data", "questions.json"),
-    JSON.stringify(questions, null, 2)
+    JSON.stringify(data, null, 2)
   );
   const stats = {};
-  questions.forEach(q => { stats[q.id] = { A: 0, B: 0 }; });
+  (data.groups || []).forEach(group => {
+    const root = group.rootQuestion;
+    stats[root.id] = Object.fromEntries(Object.keys(root.choices).map(k => [k, 0]));
+    Object.values(group.branchQuestions || {}).forEach(q => {
+      stats[q.id] = Object.fromEntries(Object.keys(q.choices).map(k => [k, 0]));
+    });
+  });
   fs.writeFileSync(
     path.join(__dirname, "quiz_stats.json"),
     JSON.stringify(stats, null, 2)
@@ -99,8 +105,8 @@ app.post("/api/quiz-click", (req, res) => {
   const { questionId, answerKey } = req.body;
   if (!fs.existsSync(statsPath)) return res.json({ ok: true });
   const stats = JSON.parse(fs.readFileSync(statsPath));
-  if (!stats[questionId] || !Object.prototype.hasOwnProperty.call(stats[questionId], answerKey))
-    return res.json({ ok: true });
+  if (!stats[questionId]) stats[questionId] = {};
+  if (!stats[questionId][answerKey]) stats[questionId][answerKey] = 0;
   stats[questionId][answerKey]++;
   fs.writeFileSync(statsPath, JSON.stringify(stats, null, 2));
   res.json({ ok: true });
