@@ -1,39 +1,58 @@
-# Kiosk Project
+# Kiosk — E-Reader Recommendation Quiz
 
-Web-based interactive kiosk application.
+Touch-screen kiosk for Innowave Global. Runs a 4-question quiz and recommends an e-reader, then prints a receipt.
 
 ## Stack
-- Node.js
-- Express
-- Frontend: HTML / JavaScript
-- Backend: REST API
-
-## Project Structure
-kiosk/
-├── public/        # Frontend UI
-├── server/        # Backend API
-├── package.json
-├── package-lock.json
-└── README.md
+- **Server**: Node.js + Express (Ubuntu)
+- **Client**: Vanilla HTML/CSS/JS
+- **Printer**: BIXOLON BK3-3 (Windows, paper: ibraheem[BK33] 72mm × 170mm)
 
 ## Setup
+
+```bash
 npm install
-npm run dev
+npm start
+```
 
-## Usage
-- Open: http://localhost:3000
-- Optimized for touch-based kiosk displays
+Server runs on `http://192.168.0.180:3000`
 
-## Notes
-- node_modules/ is ignored
-- data/ is runtime-only and not versioned
+## Launch Kiosk (Windows)
 
+Double-click `kiosk.bat` — sets BIXOLON as default printer and opens Chrome in kiosk mode.
 
-## npm start
+Or manually:
 
-## To print in ubuntu bash
-google-chrome --kiosk --kiosk-printing --user-data-dir=/tmp/kiosk-profile http://192.168.0.180/
+```cmd
+"C:\Program Files\Google\Chrome\Application\chrome.exe" --kiosk --kiosk-printing --window-size=1080,1920 --user-data-dir="C:\kiosk" http://192.168.0.180:3000/
+```
 
-## To print in windows
-you go inside chrome folder
-.\chrome.exe --kiosk --kiosk-printing --window-size=1080,1920 --user-data-dir="C:\kiosk" http://192.168.0.180:3000/
+## Printer Setup (one-time)
+
+1. Set paper size `ibraheem[BK33]` (72mm × 170mm) as default in BIXOLON printing preferences
+2. Run the Chrome policy registry fix:
+
+```powershell
+Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Google\Chrome' -Name 'PrintingPaperSizeDefault' -Value '{"custom_size":{"height":170000,"width":80000},"name":"custom"}'
+```
+
+## Network
+
+- Ubuntu server IP: `192.168.0.180`
+- Port 3000 must be open: `sudo ufw allow 3000/tcp`
+- Server binds to `0.0.0.0` — accessible from all machines on the network
+
+## Quiz Flow
+
+1. User answers 4 A/B questions
+2. Result screen shows recommended device
+3. User taps print → receipt auto-prints → screen resets after 3 seconds
+
+## Devices
+
+| Code | Device |
+|------|--------|
+|루나2 | Entry-level, image content |
+| 루나 X2 | Mid-range, image content |
+| 지구 | Home use, image content |
+| 코멧 | Portable, text content |
+| 마스 A | Premium, text content |
