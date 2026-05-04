@@ -1,10 +1,21 @@
+:root {
+  --bg: #f4efe9;
+  --text: #111111;
+  --choice-bg: #14233b;
+  --choice-text: #ffffff;
+  --btn-primary-bg: #14233b;
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: #e6e6e6;
+  --btn-secondary-text: #111111;
+}
+
 body {
   margin: 0;
-  background: #f4efe9;
-  color: #111;
+  background: var(--bg);
+  color: var(--text);
   font-family:
-    "Inter",          /* English / numbers */
-    "Pretendard",     /* Korean */
+    "Inter",
+    "Pretendard",
     system-ui,
     sans-serif;
 }
@@ -34,15 +45,14 @@ body {
 
 .q-number {
   font-size: 56px;
-  font-weight: 700;
-    font-family: "Inter", sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 800;
 }
 
 .q-text {
   font-size: 32px;
   margin-top: 10px;
-    font-family: "Pretendard", sans-serif;
+  font-family: "Pretendard", sans-serif;
   font-weight: 600;
 }
 
@@ -53,9 +63,9 @@ body {
 
 .choice {
   flex: 1;
-  background: #14233b;
-  color: #fff;
-  padding: 60px 0px 60px 0px;
+  background: var(--choice-bg);
+  color: var(--choice-text);
+  padding: 60px 0;
   text-align: center;
   cursor: pointer;
   display: flex;
@@ -86,7 +96,7 @@ body {
 }
 
 .choice-img img {
-  max-height: 420;
+  max-height: 420px;
   max-width: 100%;
   object-fit: contain;
 }
@@ -112,7 +122,7 @@ body {
   object-fit: contain;
   display: block;
   margin: 20px auto;
-    border-radius: 24px;
+  border-radius: 24px;
   overflow: hidden;
 }
 
@@ -131,7 +141,7 @@ body {
   object-fit: contain;
   display: block;
   margin: 20px auto;
-    border-radius: 18px;
+  border-radius: 18px;
   overflow: hidden;
 }
 
@@ -148,7 +158,6 @@ body {
   font-family: inherit;
 }
 
-/* pill shape */
 .btn.pill {
   padding: 24px 80px;
   border-radius: 999px;
@@ -156,19 +165,16 @@ body {
   font-weight: 700;
 }
 
-/* main button */
 .btn.primary {
-  background: #14233b;
-  color: #fff;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
 }
 
-/* secondary (optional) */
 .btn.secondary {
-  background: #e6e6e6;
-  color: #111;
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
 }
 
-/* touch feedback */
 .btn:active {
   transform: scale(0.97);
 }
