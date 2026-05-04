@@ -36,40 +36,35 @@
 </div>
 
 <script>
-  /* ================= DEVICE DESCRIPTIONS ================= */
-
-  const DEVICE_DESC = {
-    luna2:  "화이트 감성이 더해진<br/>6인치 루나2",
-    lunax2: "강력한 성능의<br/>6인치 루나 X2",
-    jigu:   "선명한 화면의<br/>7인치 지구",
-    comet:  "가볍고 빠른<br/>6인치 코멧",
-    marsa:  "몰입형 대화면<br/>10인치 마스 A"
-  };
-
-  /* ================= TYPE → DEVICE ================= */
-
   const params = new URLSearchParams(window.location.search);
-  const type = params.get("type") || "";
+  const deviceCode = params.get("device") || "";
+  const bookCode   = params.get("book")   || "";
 
   const deviceImg = document.getElementById("device-img");
 
   fetch("/data/mapping.json")
     .then(r => r.json())
     .then(mapping => {
-      const result = mapping[type];
-      if (!result) return;
+      const device = (mapping.device || {})[deviceCode] || {};
+      const book   = (mapping.book   || {})[bookCode]   || {};
 
-      document.getElementById("device-name").innerHTML = result.title;
-      document.getElementById("device-desc").innerHTML = DEVICE_DESC[result.device] || result.title;
+      if (device.title) document.getElementById("device-name").innerHTML = device.title;
+      if (device.description) document.getElementById("device-desc").innerHTML = device.description;
 
-      /* ================= PRINT & RESTART ================= */
-
-      deviceImg.onload = () => {
+      const doprint = () => {
         window.print();
         window.onafterprint = () => { window.location.href = "/"; };
         setTimeout(() => { window.location.href = "/"; }, 3000);
       };
-      deviceImg.src = result.deviceImage;
+
+      if (device.image) {
+        deviceImg.onload = doprint;
+        deviceImg.onerror = doprint;
+        deviceImg.src = device.image;
+      } else {
+        deviceImg.style.display = "none";
+        doprint();
+      }
     });
 </script>
 

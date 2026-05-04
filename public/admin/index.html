@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kiosk Admin</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-logo">Kiosk Admin</div>
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" data-tab="questions">
+          <span class="nav-icon">❓</span> Questions
+        </button>
+        <button class="nav-btn" data-tab="results">
+          <span class="nav-icon">📋</span> Results
+        </button>
+        <button class="nav-btn" data-tab="theme">
+          <span class="nav-icon">🎨</span> Theme
+        </button>
+      </nav>
+    </aside>
+
+    <main class="content">
+
+      <!-- QUESTIONS TAB -->
+      <div id="tab-questions" class="tab active">
+        <div class="tab-header">
+          <div>
+            <h1>Questions</h1>
+            <p class="tab-desc">Build the quiz — up to 4 questions, each with A/B choices.</p>
+          </div>
+          <div class="tab-actions">
+            <button class="btn-save" id="btn-save-questions">Save Questions</button>
+          </div>
+        </div>
+        <div id="questions-list"></div>
+      </div>
+
+      <!-- RESULTS TAB -->
+      <div id="tab-results" class="tab">
+        <div class="tab-header">
+          <div>
+            <h1>Results</h1>
+            <p class="tab-desc" id="results-desc">Maps each answer combination to a device recommendation.</p>
+          </div>
+          <div class="tab-actions">
+            <button class="btn-save" id="btn-save-results">Save Results</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="results-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Image</th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- THEME TAB -->
+      <div id="tab-theme" class="tab">
+        <div class="tab-header">
+          <div>
+            <h1>Theme</h1>
+            <p class="tab-desc">Control the color palette of the kiosk interface.</p>
+          </div>
+          <div class="tab-actions">
+            <button class="btn-save" id="btn-save-theme">Save Theme</button>
+          </div>
+        </div>
+        <div class="theme-grid" id="theme-grid"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

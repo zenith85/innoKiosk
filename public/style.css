@@ -1,115 +1,231 @@
-:root {
-  --bg: #f4efe9;
-  --text: #111111;
-  --choice-bg: #14233b;
-  --choice-text: #ffffff;
-  --btn-primary-bg: #14233b;
-  --btn-primary-text: #ffffff;
-  --btn-secondary-bg: #e6e6e6;
-  --btn-secondary-text: #111111;
+/* ============================================================
+   FONTS
+   ============================================================ */
+
+@font-face {
+  font-family: "GmarketSans";
+  src: url("/fonts/GmarketSans/GmarketSansTTFBold.ttf") format("truetype");
+  font-weight: 700;
 }
+
+@font-face {
+  font-family: "SUITE";
+  src: url("/fonts/SUITE/SUITE-Heavy.ttf") format("truetype");
+  font-weight: 900;
+}
+
+/* ============================================================
+   THEME COLORS  (controlled via admin → Theme tab)
+   ============================================================ */
+
+:root {
+  --bg:                #f4efe9;
+  --text:              #111111;
+  --choice-bg:         #14233b;
+  --choice-text:       #ffffff;
+  --btn-primary-bg:    #14233b;
+  --btn-primary-text:  #ffffff;
+  --btn-secondary-bg:  #e6e6e6;
+  --btn-secondary-text:#111111;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
 
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family:
-    "Inter",
-    "Pretendard",
-    system-ui,
-    sans-serif;
+  font-family: "Inter", "Pretendard", system-ui, sans-serif;
 }
 
+/* Full-screen column layout — nothing scrolls */
 .screen {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
+/* Old top header — hidden, logo moved to bottom */
 .top {
-  padding: 20px;
-  text-align: center;
+  display: none;
 }
 
-.logo {
-  height: 140px;
-}
+/* ============================================================
+   QUESTION AREA
+   ┌──────────────────────────────┐
+   │  [space above Q]             │  ← question-area padding-top
+   │  Q.1                         │  ← .q-number
+   │  [space between Q and text]  │  ← .q-text margin-top
+   │  Question text               │  ← .q-text
+   │  [space below text]          │  ← question-area padding-bottom
+   └──────────────────────────────┘
+   ============================================================ */
 
 .question-area {
   text-align: center;
-  padding-top: 120px;
-  padding-right: 80px;
-  padding-bottom: 160px;
-  padding-left: 80px;
+  padding: 260px 80px 200px; /* top | sides | bottom (gap before choices) */
 }
 
+/* "Q.1" number */
 .q-number {
-  font-size: 56px;
-  font-family: "Inter", sans-serif;
-  font-weight: 800;
+  font-size: 120px;
+  font-family: "GmarketSans", sans-serif;
+  font-weight: 700;
+  line-height: 1;
 }
 
+/* Question text — use \n in content to force a line break */
 .q-text {
-  font-size: 32px;
-  margin-top: 10px;
-  font-family: "Pretendard", sans-serif;
-  font-weight: 600;
+  font-size: 62px;
+  margin-top: 60px;          /* space between Q number and question text */
+  font-family: "SUITE", sans-serif;
+  font-weight: 900;
+  line-height: 1.4;
 }
 
+/* ============================================================
+   CHOICES AREA  (fills remaining height between question and logo)
+   ============================================================ */
+
+/* Wrapper — gap between cards is controlled by gap: */
 .choices {
   flex: 1;
+  min-height: 0;             /* prevents image overflow from pushing layout */
   display: flex;
+  gap: 20px;                 /* gap between the two choice cards */
+  padding: 0;                /* side padding = 0 so cards touch screen edges */
+  background: var(--bg);
+  align-items: stretch;
 }
 
+/* Single choice card */
 .choice {
   flex: 1;
   background: var(--choice-bg);
   color: var(--choice-text);
-  padding: 60px 0;
+  padding: 120px 40px 0;     /* top = space from card top to letter A/B */
   text-align: center;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  border-radius: 0;          /* outer corners: flat against screen edge */
+  overflow: hidden;
+  transition: filter 0.15s;
 }
 
-.choice + .choice {
-  border-left: 4px solid #fff;
+/* Left card: right corners rounded (inner side faces the gap) */
+.choices .choice:first-child {
+  border-radius: 0 120px 120px 0;
 }
 
+/* Right card: left corners rounded (inner side faces the gap) */
+.choices .choice:last-child {
+  border-radius: 120px 0 0 120px;
+}
+
+.choice:active {
+  filter: brightness(0.9);
+}
+
+/* Letter label  A / B */
 .choice-label {
-  font-size: 36px;
-  font-weight: bold;
+  font-size: 100px;
+  font-weight: 700;
+  font-family: "GmarketSans", sans-serif;
+  margin-bottom: 100px;      /* space between letter and choice text */
 }
 
+/* Choice answer text — use \n in content to force a line break */
 .choice-text {
-  font-size: 30px;
-  line-height: 1.4;
-  margin: 20px 0;
+  font-size: 44px;
+  font-weight: 900;
+  font-family: "SUITE", sans-serif;
+  line-height: 1.5;
+  margin-bottom: 40px;       /* space between choice text and image */
 }
 
+/* Image container — image sits at the bottom of the card */
 .choice-img {
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
 }
 
+/* Choice image size */
 .choice-img img {
-  max-height: 420px;
-  max-width: 100%;
+  width: 80%;
   object-fit: contain;
+  display: block;
 }
 
-/* 3-choice layout */
-.choices[data-count="3"] .choice-text {
-  font-size: 26px;
+/* ============================================================
+   3-CHOICE LAYOUT  (vertical stacked pills)
+   Overrides the side-by-side card layout above
+   ============================================================ */
+
+.choices[data-count="3"] {
+  flex-direction: column;
+  gap: 20px;                 /* gap between pills */
+  padding: 0 32px 24px;      /* side padding so pills don't touch screen edges */
+  justify-content: center;
+  align-items: stretch;
 }
+
+/* Each pill — resets card styles and switches to horizontal row */
+.choices[data-count="3"] .choice,
+.choices[data-count="3"] .choice:first-child,
+.choices[data-count="3"] .choice:last-child {
+  flex: none;
+  flex-direction: row;
+  align-items: center;
+  padding: 44px 52px;        /* inner padding of each pill */
+  border-radius: 40px;       /* fully rounded pill */
+  text-align: left;
+  min-height: 130px;
+}
+
+/* Letter label inside pill */
 .choices[data-count="3"] .choice-label {
-  font-size: 30px;
+  font-size: 52px;
+  margin-bottom: 0;
+  margin-right: 44px;        /* space between letter and pill text */
+  min-width: 60px;
+  flex-shrink: 0;
 }
 
-/* RESULT SCREEN */
+/* Answer text inside pill */
+.choices[data-count="3"] .choice-text {
+  font-size: 32px;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+/* No images in pill layout */
+.choices[data-count="3"] .choice-img {
+  display: none;
+}
+
+/* ============================================================
+   BOTTOM LOGO
+   ============================================================ */
+
+.bottom {
+  padding: 94px 0px 28px;        /* top/bottom padding controls gap above logo */
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.logo {
+  height: 240px;             /* logo size */
+}
+
+/* ============================================================
+   RESULT SCREEN
+   ============================================================ */
 
 .result-area {
   text-align: center;
@@ -153,40 +269,7 @@ body {
   overflow: hidden;
 }
 
-.result-actions {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  padding-bottom: 60px;
-}
-
-.btn {
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-.btn.pill {
-  padding: 24px 80px;
-  border-radius: 999px;
-  font-size: 28px;
-  font-weight: 700;
-}
-
-.btn.primary {
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
-}
-
-.btn.secondary {
-  background: var(--btn-secondary-bg);
-  color: var(--btn-secondary-text);
-}
-
-.btn:active {
-  transform: scale(0.97);
-}
-
+/* Two-column layout: device on left, book on right */
 .result-columns {
   display: flex;
   gap: 0;
@@ -232,4 +315,39 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Result action buttons */
+.result-actions {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding-bottom: 60px;
+}
+
+.btn {
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn.pill {
+  padding: 24px 80px;
+  border-radius: 999px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.btn.primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.btn.secondary {
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+}
+
+.btn:active {
+  transform: scale(0.97);
 }

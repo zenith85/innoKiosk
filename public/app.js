@@ -44,16 +44,16 @@ function renderQuestion(q) {
 
   app.innerHTML = `
     <div class="screen">
-      <header class="top">
-        <img src="/img/logo.png" class="logo" />
-      </header>
       <section class="question-area">
         <div class="q-number">Q.${questionNumber()}</div>
-        <div class="q-text">${q.text}</div>
+        <div class="q-text">${q.text.replace(/\\n|\n/g, '<br>')}</div>
       </section>
       <section class="choices" data-count="${count}">
         ${choiceKeys.map(key => renderChoice(q, key)).join("")}
       </section>
+      <footer class="bottom">
+        <img src="/img/logo.png" class="logo" />
+      </footer>
     </div>
   `;
 }
@@ -68,7 +68,7 @@ function renderChoice(q, key) {
   return `
     <div class="choice" onclick="answer('${key}')">
       <div class="choice-label">${key}</div>
-      <div class="choice-text">${c.label}</div>
+      <div class="choice-text">${c.label.replace(/\\n|\n/g, '<br>')}</div>
       <div class="choice-img">${img}</div>
     </div>
   `;
