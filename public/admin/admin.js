@@ -4,7 +4,10 @@ let state = { groups: [], mapping: { device: {}, book: {} }, theme: {} };
 const THEME_LABELS = {
   bg:               "Page Background",
   text:             "Text Color",
-  choiceBg:         "Choice Background",
+  choiceBg:         "Choice Fallback Background",
+  choiceBg1:        "Choice A Background",
+  choiceBg2:        "Choice B Background",
+  choiceBg3:        "Choice C Background",
   choiceText:       "Choice Text",
   btnPrimaryBg:     "Primary Button",
   btnPrimaryText:   "Primary Button Text",

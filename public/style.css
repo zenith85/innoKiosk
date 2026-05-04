@@ -21,7 +21,10 @@
 :root {
   --bg:                #f4efe9;
   --text:              #111111;
-  --choice-bg:         #14233b;
+  --choice-bg:         #14233b;  /* fallback */
+  --choice-bg-1:       #14233b;  /* Choice A */
+  --choice-bg-2:       #1a2e4a;  /* Choice B */
+  --choice-bg-3:       #0f1a2e;  /* Choice C */
   --choice-text:       #ffffff;
   --btn-primary-bg:    #14233b;
   --btn-primary-text:  #ffffff;
@@ -104,7 +107,7 @@ body {
 /* Single choice card */
 .choice {
   flex: 1;
-  background: var(--choice-bg);
+  background: var(--choice-bg);  /* fallback */
   color: var(--choice-text);
   padding: 120px 40px 0;     /* top = space from card top to letter A/B */
   text-align: center;
@@ -119,12 +122,19 @@ body {
 /* Left card: right corners rounded (inner side faces the gap) */
 .choices .choice:first-child {
   border-radius: 0 120px 120px 0;
+  background: var(--choice-bg-1);
 }
 
 /* Right card: left corners rounded (inner side faces the gap) */
 .choices .choice:last-child {
   border-radius: 120px 0 0 120px;
+  background: var(--choice-bg-2);
 }
+
+/* Per-choice colors for 3-choice pills */
+.choices[data-count="3"] .choice:nth-child(1) { background: var(--choice-bg-1); }
+.choices[data-count="3"] .choice:nth-child(2) { background: var(--choice-bg-2); }
+.choices[data-count="3"] .choice:nth-child(3) { background: var(--choice-bg-3); }
 
 .choice:active {
   filter: brightness(0.9);

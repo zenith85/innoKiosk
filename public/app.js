@@ -14,6 +14,9 @@ async function applyTheme() {
     if (theme.bg)               root.style.setProperty("--bg", theme.bg);
     if (theme.text)             root.style.setProperty("--text", theme.text);
     if (theme.choiceBg)         root.style.setProperty("--choice-bg", theme.choiceBg);
+    if (theme.choiceBg1)        root.style.setProperty("--choice-bg-1", theme.choiceBg1);
+    if (theme.choiceBg2)        root.style.setProperty("--choice-bg-2", theme.choiceBg2);
+    if (theme.choiceBg3)        root.style.setProperty("--choice-bg-3", theme.choiceBg3);
     if (theme.choiceText)       root.style.setProperty("--choice-text", theme.choiceText);
     if (theme.btnPrimaryBg)     root.style.setProperty("--btn-primary-bg", theme.btnPrimaryBg);
     if (theme.btnPrimaryText)   root.style.setProperty("--btn-primary-text", theme.btnPrimaryText);

@@ -23,13 +23,13 @@ app.use(express.json());
 const adminAuth = (req, res, next) => {
   const auth = req.headers.authorization;
   if (!auth || !auth.startsWith("Basic ")) {
-    res.set("WWW-Authenticate", 'Basic realm="Kiosk Admin"');
+    res.set("WWW-Authenticate", 'Basic realm="INNOSPACEONE Kiosk Admin"');
     return res.status(401).send("Unauthorized");
   }
   const credentials = Buffer.from(auth.slice(6), "base64").toString();
   const password = credentials.slice(credentials.indexOf(":") + 1);
   if (password !== adminPassword) {
-    res.set("WWW-Authenticate", 'Basic realm="Kiosk Admin"');
+    res.set("WWW-Authenticate", 'Basic realm="INNOSPACEONE Kiosk Admin"');
     return res.status(401).send("Unauthorized");
   }
   next();
