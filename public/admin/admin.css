@@ -276,6 +276,20 @@ body {
   color: #999;
 }
 
+.btn-remove-img {
+  margin-top: 6px;
+  width: 100%;
+  background: none;
+  border: 1px solid #e0e0e0;
+  color: #e53935;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+.btn-remove-img:hover { background: #fdecea; border-color: #e53935; }
+
 .upload-input {
   position: absolute;
   inset: 0;
@@ -442,3 +456,48 @@ tbody tr:last-child td { border-bottom: none; }
   transform: translateX(-50%) translateY(0);
 }
 .toast.error { background: #c0392b; }
+
+/* ── Bilingual inputs ── */
+.bilingual-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.bilingual-row.inline {
+  flex-direction: row;
+  gap: 12px;
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.bilingual-row.compact {
+  gap: 6px;
+  margin-bottom: 0;
+}
+
+.lang-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.lang-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: #1a1a2e;
+  padding: 3px 7px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
+
+.bilingual-row .question-text-input,
+.bilingual-row .choice-label-input,
+.bilingual-row .table-input {
+  margin-bottom: 0;
+  flex: 1;
+}

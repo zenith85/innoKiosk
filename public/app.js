@@ -1,11 +1,19 @@
 let groups = [];
 let mapping = {};
+let lang = "ko";
 let currentGroupIdx = 0;
-let currentStep = 0;       // 0 = root question, 1 = branch question
+let currentStep = 0;
 let firstAnswerKey = null;
-let groupAnswers = {};     // { device: "AB", book: "BA" }
+let groupAnswers = {};
 
 const app = document.getElementById("app");
+
+/* Returns the correct language string from a {ko, en} object or plain string */
+function getText(val) {
+  if (!val) return '';
+  if (typeof val === 'object') return val[lang] || val.ko || val.en || '';
+  return val;
+}
 
 async function applyTheme() {
   try {
@@ -30,6 +38,29 @@ async function loadData() {
   const data = await fetch("/data/questions.json").then(r => r.json());
   groups  = data.groups;
   mapping = await fetch("/data/mapping.json").then(r => r.json());
+  showLanguageSelect();
+}
+
+function showLanguageSelect() {
+  app.innerHTML = `
+    <div class="screen lang-screen">
+      <div class="lang-content">
+        <img src="/img/logo.png" class="lang-logo" />
+        <div class="lang-buttons">
+          <button class="btn-lang" onclick="selectLang('ko')">한국어</button>
+          <button class="btn-lang" onclick="selectLang('en')">English</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function selectLang(l) {
+  lang = l;
+  currentGroupIdx = 0;
+  currentStep = 0;
+  firstAnswerKey = null;
+  groupAnswers = {};
   renderCurrentQuestion();
 }
 
@@ -49,7 +80,7 @@ function renderQuestion(q) {
     <div class="screen">
       <section class="question-area">
         <div class="q-number">Q.${questionNumber()}</div>
-        <div class="q-text">${q.text.replace(/\\n|\n/g, '<br>')}</div>
+        <div class="q-text">${getText(q.text).replace(/\\n|\n/g, '<br>')}</div>
       </section>
       <section class="choices" data-count="${count}">
         ${choiceKeys.map(key => renderChoice(q, key)).join("")}
@@ -71,7 +102,7 @@ function renderChoice(q, key) {
   return `
     <div class="choice" onclick="answer('${key}')">
       <div class="choice-label">${key}</div>
-      <div class="choice-text">${c.label.replace(/\\n|\n/g, '<br>')}</div>
+      <div class="choice-text">${getText(c.label).replace(/\\n|\n/g, '<br>')}</div>
       <div class="choice-img">${img}</div>
     </div>
   `;
@@ -122,26 +153,26 @@ function showResult() {
         <div class="result-columns">
 
           <div class="result-col">
-            <div class="result-tag">추천 기기</div>
-            <div class="result-title">${device.title || ""}</div>
+            <div class="result-tag">${lang === 'en' ? 'Recommended Device' : '추천 기기'}</div>
+            <div class="result-title">${getText(device.title) || ""}</div>
             ${device.image ? `<img class="result-device-img" src="${device.image}" />` : ""}
-            ${device.description ? `<p class="result-desc">${device.description}</p>` : ""}
+            ${getText(device.description) ? `<p class="result-desc">${getText(device.description)}</p>` : ""}
           </div>
 
           <div class="result-divider"></div>
 
           <div class="result-col">
-            <div class="result-tag">추천 도서</div>
-            <div class="result-title">${book.title || ""}</div>
+            <div class="result-tag">${lang === 'en' ? 'Recommended Book' : '추천 도서'}</div>
+            <div class="result-title">${getText(book.title) || ""}</div>
             ${book.image ? `<img class="result-book-img" src="${book.image}" />` : ""}
-            ${book.description ? `<p class="result-desc">${book.description}</p>` : ""}
+            ${getText(book.description) ? `<p class="result-desc">${getText(book.description)}</p>` : ""}
           </div>
 
         </div>
       </section>
       <section class="result-actions">
-        <button class="btn pill primary" onclick="printResult('${deviceCode}','${bookCode}')">티켓 출력하기</button>
-        <button class="btn pill secondary" onclick="reset()">다시 시작</button>
+        <button class="btn pill primary" onclick="printResult('${deviceCode}','${bookCode}')">${lang === 'en' ? 'Print Ticket' : '티켓 출력하기'}</button>
+        <button class="btn pill secondary" onclick="reset()">${lang === 'en' ? 'Start Over' : '다시 시작'}</button>
       </section>
     </div>
   `;
@@ -152,11 +183,7 @@ function printResult(deviceCode, bookCode) {
 }
 
 function reset() {
-  currentGroupIdx = 0;
-  currentStep = 0;
-  firstAnswerKey = null;
-  groupAnswers = {};
-  renderCurrentQuestion();
+  showLanguageSelect();
 }
 
 loadData();

@@ -45,12 +45,18 @@ function renderQuestions() {
 }
 
 function groupSection(group, gi) {
+  const labelKo = getLang(group.label, 'ko');
+  const labelEn = getLang(group.label, 'en');
   return `
     <div class="group-section">
       <div class="group-header">
         <span class="group-badge">${gi + 1}</span>
-        <input class="group-label-input" value="${escHtml(group.label)}"
-          onchange="updateGroupLabel(${gi}, this.value)" />
+        <div class="bilingual-row inline">
+          <input class="group-label-input" placeholder="그룹 이름 (KR)" value="${escHtml(labelKo)}"
+            onchange="updateGroupLabel(${gi}, 'ko', this.value)" />
+          <input class="group-label-input" placeholder="Group name (EN)" value="${escHtml(labelEn)}"
+            onchange="updateGroupLabel(${gi}, 'en', this.value)" />
+        </div>
       </div>
       ${questionBlock(group.rootQuestion, gi, 'root', null)}
       ${questionBlock(group.branchQuestions.A, gi, 'branch', 'A')}
@@ -64,15 +70,28 @@ function questionBlock(q, gi, type, branchKey) {
   const label = type === 'root'
     ? 'Root Question (A/B)'
     : `Branch when root = <strong>${branchKey}</strong> (A/B/C)`;
+  const textKo = getLang(q.text, 'ko');
+  const textEn = getLang(q.text, 'en');
 
   return `
     <div class="question-card">
       <div class="question-card-header">
         <span class="question-number">${label}</span>
       </div>
-      <input class="question-text-input" placeholder="Question text..."
-        value="${escHtml(q.text)}"
-        onchange="updateQuestionText(${gi}, '${type}', '${branchKey}', this.value)" />
+      <div class="bilingual-row">
+        <div class="lang-field">
+          <span class="lang-tag">KR</span>
+          <input class="question-text-input" placeholder="질문 텍스트..."
+            value="${escHtml(textKo)}"
+            onchange="updateQuestionText(${gi}, '${type}', '${branchKey}', 'ko', this.value)" />
+        </div>
+        <div class="lang-field">
+          <span class="lang-tag">EN</span>
+          <input class="question-text-input" placeholder="Question text..."
+            value="${escHtml(textEn)}"
+            onchange="updateQuestionText(${gi}, '${type}', '${branchKey}', 'en', this.value)" />
+        </div>
+      </div>
       <div class="choices-row choices-${choiceKeys.length}">
         ${choiceKeys.map(key => choiceCard(q, gi, type, branchKey, key)).join("")}
       </div>
@@ -83,18 +102,32 @@ function questionBlock(q, gi, type, branchKey) {
 function choiceCard(q, gi, type, branchKey, key) {
   const c = q.choices[key];
   const img = c.image || "";
+  const labelKo = getLang(c.label, 'ko');
+  const labelEn = getLang(c.label, 'en');
   return `
     <div class="choice-card">
       <span class="choice-badge">${key}</span>
-      <input class="choice-label-input" placeholder="Choice label..."
-        value="${escHtml(c.label)}"
-        onchange="updateChoiceLabel(${gi}, '${type}', '${branchKey}', '${key}', this.value)" />
+      <div class="bilingual-row">
+        <div class="lang-field">
+          <span class="lang-tag">KR</span>
+          <input class="choice-label-input" placeholder="답변 텍스트..."
+            value="${escHtml(labelKo)}"
+            onchange="updateChoiceLabel(${gi}, '${type}', '${branchKey}', '${key}', 'ko', this.value)" />
+        </div>
+        <div class="lang-field">
+          <span class="lang-tag">EN</span>
+          <input class="choice-label-input" placeholder="Choice text..."
+            value="${escHtml(labelEn)}"
+            onchange="updateChoiceLabel(${gi}, '${type}', '${branchKey}', '${key}', 'en', this.value)" />
+        </div>
+      </div>
       <div class="image-upload-area">
         ${img ? `<img class="image-preview" src="${img}" />` : `<img class="image-preview hidden" />`}
         <span class="upload-hint">${img ? "Click to change" : "Click to upload"}</span>
         <input type="file" accept="image/*" class="upload-input"
           onchange="uploadChoiceImage(${gi}, '${type}', '${branchKey}', '${key}', this)" />
       </div>
+      ${img ? `<button class="btn-remove-img" onclick="removeChoiceImage(${gi}, '${type}', '${branchKey}', '${key}')">✕ Remove image</button>` : ""}
     </div>
   `;
 }
@@ -104,16 +137,35 @@ function getQuestion(gi, type, branchKey) {
   return type === 'root' ? group.rootQuestion : group.branchQuestions[branchKey];
 }
 
-function updateGroupLabel(gi, val) {
-  state.groups[gi].label = val;
+function getLang(val, langKey) {
+  if (!val) return '';
+  if (typeof val === 'object') return val[langKey] || '';
+  return langKey === 'ko' ? val : '';
 }
 
-function updateQuestionText(gi, type, branchKey, val) {
-  getQuestion(gi, type, branchKey).text = val;
+function setLang(obj, field, langKey, val) {
+  const cur = obj[field];
+  if (typeof cur !== 'object' || cur === null) {
+    obj[field] = { ko: typeof cur === 'string' ? cur : '', en: '' };
+  }
+  obj[field][langKey] = val;
 }
 
-function updateChoiceLabel(gi, type, branchKey, key, val) {
-  getQuestion(gi, type, branchKey).choices[key].label = val;
+function updateGroupLabel(gi, langKey, val) {
+  setLang(state.groups[gi], 'label', langKey, val);
+}
+
+function updateQuestionText(gi, type, branchKey, langKey, val) {
+  setLang(getQuestion(gi, type, branchKey), 'text', langKey, val);
+}
+
+function updateChoiceLabel(gi, type, branchKey, key, langKey, val) {
+  setLang(getQuestion(gi, type, branchKey).choices[key], 'label', langKey, val);
+}
+
+function removeChoiceImage(gi, type, branchKey, key) {
+  getQuestion(gi, type, branchKey).choices[key].image = "";
+  renderQuestions();
 }
 
 async function uploadChoiceImage(gi, type, branchKey, key, input) {
@@ -147,15 +199,45 @@ function resultSection(groupId, label, data) {
   const rows = RESULT_COMBOS.map(combo => {
     const r = data[combo] || {};
     const img = r.image || "";
+    const titleKo = getLang(r.title, 'ko');
+    const titleEn = getLang(r.title, 'en');
+    const descKo  = getLang(r.description, 'ko');
+    const descEn  = getLang(r.description, 'en');
     return `
       <tr data-group="${groupId}" data-combo="${combo}">
         <td><span class="combo-code">${combo}</span></td>
-        <td><input class="table-input" placeholder="Title"
-          value="${escHtml(r.title || "")}"
-          onchange="updateMapping('${groupId}','${combo}','title', this.value)" /></td>
-        <td><input class="table-input" placeholder="Description"
-          value="${escHtml(r.description || "")}"
-          onchange="updateMapping('${groupId}','${combo}','description', this.value)" /></td>
+        <td>
+          <div class="bilingual-row compact">
+            <div class="lang-field">
+              <span class="lang-tag">KR</span>
+              <input class="table-input" placeholder="제목"
+                value="${escHtml(titleKo)}"
+                onchange="updateMappingLang('${groupId}','${combo}','title','ko',this.value)" />
+            </div>
+            <div class="lang-field">
+              <span class="lang-tag">EN</span>
+              <input class="table-input" placeholder="Title"
+                value="${escHtml(titleEn)}"
+                onchange="updateMappingLang('${groupId}','${combo}','title','en',this.value)" />
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="bilingual-row compact">
+            <div class="lang-field">
+              <span class="lang-tag">KR</span>
+              <input class="table-input" placeholder="설명"
+                value="${escHtml(descKo)}"
+                onchange="updateMappingLang('${groupId}','${combo}','description','ko',this.value)" />
+            </div>
+            <div class="lang-field">
+              <span class="lang-tag">EN</span>
+              <input class="table-input" placeholder="Description"
+                value="${escHtml(descEn)}"
+                onchange="updateMappingLang('${groupId}','${combo}','description','en',this.value)" />
+            </div>
+          </div>
+        </td>
         <td>
           <div class="table-img-cell">
             <img class="table-thumb${img ? "" : " hidden"}" src="${img}" />
@@ -163,6 +245,7 @@ function resultSection(groupId, label, data) {
               <input type="file" accept="image/*"
                 onchange="uploadMappingImage('${groupId}','${combo}', this)" />
             </label>
+            ${img ? `<button class="btn-remove" onclick="removeMappingImage('${groupId}','${combo}')">✕</button>` : ""}
           </div>
         </td>
       </tr>
@@ -181,6 +264,17 @@ function updateMapping(groupId, combo, field, val) {
   if (!state.mapping[groupId]) state.mapping[groupId] = {};
   if (!state.mapping[groupId][combo]) state.mapping[groupId][combo] = {};
   state.mapping[groupId][combo][field] = val;
+}
+
+function updateMappingLang(groupId, combo, field, langKey, val) {
+  if (!state.mapping[groupId]) state.mapping[groupId] = {};
+  if (!state.mapping[groupId][combo]) state.mapping[groupId][combo] = {};
+  setLang(state.mapping[groupId][combo], field, langKey, val);
+}
+
+function removeMappingImage(groupId, combo) {
+  updateMapping(groupId, combo, "image", "");
+  renderResults();
 }
 
 async function uploadMappingImage(groupId, combo, input) {
