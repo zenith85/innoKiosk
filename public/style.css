@@ -157,7 +157,7 @@ body {
 
 /* Choice image size */
 .choice-img img {
-  width: 80%;
+  width: 120%;
   object-fit: contain;
   display: block;
 }
@@ -170,7 +170,7 @@ body {
 .choices[data-count="3"] {
   flex-direction: column;
   gap: 20px;                 /* gap between pills */
-  padding: 0 32px 24px;      /* side padding so pills don't touch screen edges */
+  padding: 0 80px 84px;      /* side padding so pills don't touch screen edges */
   justify-content: center;
   align-items: stretch;
 }
@@ -182,26 +182,27 @@ body {
   flex: none;
   flex-direction: row;
   align-items: center;
-  padding: 44px 52px;        /* inner padding of each pill */
-  border-radius: 40px;       /* fully rounded pill */
+  padding: 64px 152px;        /* inner padding of each pill */
+  border-radius: 80px;       /* fully rounded pill */
   text-align: left;
   min-height: 130px;
 }
 
-/* Letter label inside pill */
+/* Letter label inside pill — matches .choice-label font size */
 .choices[data-count="3"] .choice-label {
-  font-size: 52px;
+  font-size: 80px;
   margin-bottom: 0;
-  margin-right: 44px;        /* space between letter and pill text */
-  min-width: 60px;
+  margin-right: 84px;        /* space between letter and pill text */
+  min-width: 80px;
   flex-shrink: 0;
 }
 
-/* Answer text inside pill */
+/* Answer text inside pill — matches .choice-text font size */
 .choices[data-count="3"] .choice-text {
-  font-size: 32px;
+  font-size: 44px;
   margin-bottom: 0;
   line-height: 1.4;
+  text-align: left;
 }
 
 /* No images in pill layout */
