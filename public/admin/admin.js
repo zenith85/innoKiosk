@@ -1,5 +1,6 @@
 // ── State ──────────────────────────────────────────────────
 let state = { groups: [], mapping: { device: {}, book: {} }, theme: {} };
+let analysisCharts = {};
 
 const THEME_LABELS = {
   bg:               "Page Background",
@@ -26,6 +27,8 @@ async function init() {
   renderQuestions();
   renderResults();
   renderTheme();
+  renderAnalysis();
+  renderResultCharts();
 }
 
 // ── Tab navigation ─────────────────────────────────────────
@@ -390,6 +393,165 @@ function toast(msg, isError = false) {
   el.className = "toast show" + (isError ? " error" : "");
   setTimeout(() => { el.className = "toast"; }, 2500);
 }
+
+// ── Analysis ───────────────────────────────────────────────
+async function renderAnalysis() {
+  const stats = await fetch("/admin/api/stats").then(r => r.json());
+
+  Object.values(analysisCharts).forEach(c => c.destroy());
+  analysisCharts = {};
+
+  const COLORS = ['#4e79a7', '#f28e2b', '#e15759'];
+
+  const container = document.getElementById("analysis-body");
+  container.innerHTML = state.groups.map((group, gi) => {
+    const questions = [
+      { q: group.rootQuestion,      label: `Group ${gi + 1} — Root Question` },
+      { q: group.branchQuestions.A, label: `Group ${gi + 1} — Branch A` },
+      { q: group.branchQuestions.B, label: `Group ${gi + 1} — Branch B` }
+    ];
+    return `
+      <div class="analysis-group">
+        <div class="analysis-group-title">${escHtml(getLang(group.label, 'ko') || `Group ${gi + 1}`)}</div>
+        ${questions.map(({ q, label }) => {
+          const qStats = stats[q.id] || {};
+          const total  = Object.values(qStats).reduce((a, b) => a + b, 0);
+          return `
+            <div class="analysis-card">
+              <div class="analysis-card-header">
+                <span class="analysis-label">${label}</span>
+                <span class="analysis-total">${total} responses</span>
+              </div>
+              <p class="analysis-question">${escHtml(getLang(q.text, 'ko'))}</p>
+              <div class="analysis-chart-wrap">
+                <canvas id="chart-${q.id}"></canvas>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }).join('');
+
+  state.groups.forEach(group => {
+    [group.rootQuestion, group.branchQuestions.A, group.branchQuestions.B].forEach(q => {
+      const canvas = document.getElementById(`chart-${q.id}`);
+      if (!canvas) return;
+      const qStats  = stats[q.id] || {};
+      const choices = Object.keys(q.choices);
+      const total   = choices.reduce((a, k) => a + (qStats[k] || 0), 0);
+      const labels  = choices.map(k => {
+        const pct  = total ? Math.round((qStats[k] || 0) / total * 100) : 0;
+        const text = getLang(q.choices[k].label, 'ko') || k;
+        return `${k}: ${text}  (${pct}%)`;
+      });
+      const data = choices.map(k => qStats[k] || 0);
+
+      analysisCharts[q.id] = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{ data, backgroundColor: COLORS.slice(0, choices.length), borderRadius: 6 }]
+        },
+        options: {
+          indexAxis: 'y',
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f0f0f0' } },
+            y: { grid: { display: false } }
+          }
+        }
+      });
+    });
+  });
+}
+
+async function renderResultCharts() {
+  const resultStats = await fetch("/admin/api/result-stats").then(r => r.json());
+
+  ['device', 'book'].forEach(type => {
+    const existing = Chart.getChart(`chart-result-${type}`);
+    if (existing) existing.destroy();
+  });
+
+  const container = document.getElementById("analysis-result-charts");
+  if (!container) return;
+
+  ['device', 'book'].forEach(type => {
+    const data  = resultStats[type] || {};
+    const combos = Object.keys(data).length ? Object.keys(data) : ["AA","AB","AC","BA","BB","BC"];
+    const counts = combos.map(k => data[k] || 0);
+    const canvas = document.getElementById(`chart-result-${type}`);
+    if (!canvas) return;
+
+    const PALETTE = ['#4e79a7','#f28e2b','#e15759','#76b7b2','#59a14f','#edc948'];
+    new Chart(canvas, {
+      type: 'doughnut',
+      data: {
+        labels: combos.map(k => {
+          const entry = (state.mapping[type] || {})[k] || {};
+          return `${k} — ${entry.title?.ko || k}`;
+        }),
+        datasets: [{ data: counts, backgroundColor: PALETTE, borderWidth: 2 }]
+      },
+      options: {
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } }
+        }
+      }
+    });
+  });
+}
+
+document.getElementById("btn-refresh-analysis").addEventListener("click", () => {
+  renderAnalysis();
+  renderResultCharts();
+});
+
+document.getElementById("btn-export-excel").addEventListener("click", async () => {
+  const [stats, resultStats] = await Promise.all([
+    fetch("/admin/api/stats").then(r => r.json()),
+    fetch("/admin/api/result-stats").then(r => r.json())
+  ]);
+
+  const wb = XLSX.utils.book_new();
+
+  // Sheet 1 — Question Stats
+  const qRows = [["Group", "Question", "Choice", "Choice Text (KO)", "Count", "%"]];
+  state.groups.forEach((group, gi) => {
+    const groupLabel = getLang(group.label, 'ko') || `Group ${gi + 1}`;
+    const questions = [
+      { q: group.rootQuestion,      label: "Root" },
+      { q: group.branchQuestions.A, label: "Branch A" },
+      { q: group.branchQuestions.B, label: "Branch B" }
+    ];
+    questions.forEach(({ q, label }) => {
+      const qStats = stats[q.id] || {};
+      const total  = Object.values(qStats).reduce((a, b) => a + b, 0);
+      const qText  = getLang(q.text, 'ko');
+      Object.keys(q.choices).forEach(k => {
+        const count = qStats[k] || 0;
+        const pct   = total ? Math.round(count / total * 100) : 0;
+        qRows.push([groupLabel, `${label}: ${qText}`, k, getLang(q.choices[k].label, 'ko'), count, `${pct}%`]);
+      });
+    });
+  });
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(qRows), "Questions");
+
+  // Sheet 2 — Results Picked
+  const rRows = [["Type", "Code", "Title (KO)", "Count"]];
+  ["device", "book"].forEach(type => {
+    const data = resultStats[type] || {};
+    Object.keys(state.mapping[type] || {}).forEach(code => {
+      const title = getLang((state.mapping[type][code] || {}).title, 'ko') || code;
+      rRows.push([type, code, title, data[code] || 0]);
+    });
+  });
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rRows), "Results Picked");
+
+  const date = new Date().toISOString().slice(0, 10);
+  XLSX.writeFile(wb, `kiosk-stats-${date}.xlsx`);
+});
 
 // ── Utils ──────────────────────────────────────────────────
 function escHtml(str) {

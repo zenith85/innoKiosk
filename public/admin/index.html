@@ -21,6 +21,9 @@
         <button class="nav-btn" data-tab="theme">
           <span class="nav-icon">🎨</span> Theme
         </button>
+        <button class="nav-btn" data-tab="analysis">
+          <span class="nav-icon">📊</span> Analysis
+        </button>
       </nav>
     </aside>
 
@@ -82,11 +85,42 @@
         <div class="theme-grid" id="theme-grid"></div>
       </div>
 
+      <!-- ANALYSIS TAB -->
+      <div id="tab-analysis" class="tab">
+        <div class="tab-header">
+          <div>
+            <h1>Analysis</h1>
+            <p class="tab-desc">Quiz answer statistics per question.</p>
+          </div>
+          <div class="tab-actions">
+            <button class="btn-save" id="btn-refresh-analysis">Refresh</button>
+            <button class="btn-save btn-export" id="btn-export-excel">Export Excel</button>
+          </div>
+        </div>
+        <div id="analysis-body"></div>
+
+        <div id="analysis-result-charts" class="analysis-result-section">
+          <div class="analysis-group-title" style="margin-bottom:16px">Results Picked</div>
+          <div class="analysis-result-row">
+            <div class="analysis-result-card">
+              <p class="analysis-result-label">Devices</p>
+              <canvas id="chart-result-device"></canvas>
+            </div>
+            <div class="analysis-result-card">
+              <p class="analysis-result-label">Books</p>
+              <canvas id="chart-result-book"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 
   <div id="toast" class="toast"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>

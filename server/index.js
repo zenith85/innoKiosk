@@ -84,6 +84,30 @@ app.post("/admin/api/mapping", (req, res) => {
   res.json({ ok: true });
 });
 
+app.get("/admin/api/stats", adminAuth, (req, res) => {
+  const statsPath = path.join(__dirname, "quiz_stats.json");
+  const stats = fs.existsSync(statsPath) ? JSON.parse(fs.readFileSync(statsPath)) : {};
+  res.json(stats);
+});
+
+app.get("/admin/api/result-stats", adminAuth, (req, res) => {
+  const p = path.join(__dirname, "result_stats.json");
+  const stats = fs.existsSync(p) ? JSON.parse(fs.readFileSync(p)) : { device: {}, book: {} };
+  res.json(stats);
+});
+
+app.post("/api/result-pick", (req, res) => {
+  const { deviceCode, bookCode } = req.body;
+  const p = path.join(__dirname, "result_stats.json");
+  const stats = fs.existsSync(p) ? JSON.parse(fs.readFileSync(p)) : { device: {}, book: {} };
+  if (!stats.device) stats.device = {};
+  if (!stats.book)   stats.book   = {};
+  stats.device[deviceCode] = (stats.device[deviceCode] || 0) + 1;
+  stats.book[bookCode]     = (stats.book[bookCode]     || 0) + 1;
+  fs.writeFileSync(p, JSON.stringify(stats, null, 2));
+  res.json({ ok: true });
+});
+
 app.post("/admin/api/theme", (req, res) => {
   fs.writeFileSync(
     path.join(__dirname, "..", "data", "theme.json"),

@@ -502,3 +502,98 @@ tbody tr:last-child td { border-bottom: none; }
   margin-bottom: 0;
   flex: 1;
 }
+
+/* ── Analysis ──────────────────────────────────────────── */
+#analysis-body {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-bottom: 40px;
+}
+
+.analysis-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.analysis-group-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.analysis-card {
+  background: #fff;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+.analysis-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.analysis-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.analysis-total {
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+}
+
+.analysis-question {
+  margin: 0 0 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.4;
+}
+
+.analysis-chart-wrap {
+  height: 100px;
+}
+
+.analysis-result-section {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.analysis-result-row {
+  display: flex;
+  gap: 24px;
+}
+
+.analysis-result-card {
+  flex: 1;
+  background: #fff;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+.analysis-result-label {
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-align: center;
+}
+
+.btn-export {
+  background: #2d6a4f !important;
+}

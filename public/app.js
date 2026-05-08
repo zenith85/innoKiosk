@@ -141,6 +141,12 @@ function answer(key) {
 function showResult() {
   const deviceCode = groupAnswers["device"];
   const bookCode   = groupAnswers["book"];
+
+  fetch("/api/result-pick", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ deviceCode, bookCode })
+  });
   const device = mapping.device[deviceCode] || {};
   const book   = mapping.book[bookCode]     || {};
 
