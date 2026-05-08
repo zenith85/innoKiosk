@@ -198,12 +198,14 @@ function renderResults() {
 function resultSection(groupId, label, data) {
   const rows = RESULT_COMBOS.map(combo => {
     const r = data[combo] || {};
-    const img = r.image || "";
-    const qr  = r.qr    || "";
-    const titleKo = getLang(r.title, 'ko');
-    const titleEn = getLang(r.title, 'en');
-    const descKo  = getLang(r.description, 'ko');
-    const descEn  = getLang(r.description, 'en');
+    const img      = r.image || "";
+    const qr       = r.qr    || "";
+    const titleKo  = getLang(r.title, 'ko');
+    const titleEn  = getLang(r.title, 'en');
+    const descKo   = getLang(r.description, 'ko');
+    const descEn   = getLang(r.description, 'en');
+    const catchKo  = getLang(r.catchphrase, 'ko');
+    const catchEn  = getLang(r.catchphrase, 'en');
     return `
       <tr data-group="${groupId}" data-combo="${combo}">
         <td><span class="combo-code">${combo}</span></td>
@@ -223,22 +225,35 @@ function resultSection(groupId, label, data) {
             </div>
           </div>
         </td>
+        ${groupId === 'book' ? `
         <td>
           <div class="bilingual-row compact">
             <div class="lang-field">
               <span class="lang-tag">KR</span>
-              <input class="table-input" placeholder="설명"
-                value="${escHtml(descKo)}"
-                onchange="updateMappingLang('${groupId}','${combo}','description','ko',this.value)" />
+              <textarea class="table-input table-textarea" placeholder="설명 (\\n = 줄바꿈)"
+                onchange="updateMappingLang('book','${combo}','description','ko',this.value)">${escHtml(descKo)}</textarea>
             </div>
             <div class="lang-field">
               <span class="lang-tag">EN</span>
-              <input class="table-input" placeholder="Description"
-                value="${escHtml(descEn)}"
-                onchange="updateMappingLang('${groupId}','${combo}','description','en',this.value)" />
+              <textarea class="table-input table-textarea" placeholder="Description (\\n = new line)"
+                onchange="updateMappingLang('book','${combo}','description','en',this.value)">${escHtml(descEn)}</textarea>
             </div>
           </div>
         </td>
+        <td>
+          <div class="bilingual-row compact">
+            <div class="lang-field">
+              <span class="lang-tag">KR</span>
+              <textarea class="table-input table-textarea" placeholder="캐치프레이즈 (\\n = 줄바꿈)"
+                onchange="updateMappingLang('book','${combo}','catchphrase','ko',this.value)">${escHtml(catchKo)}</textarea>
+            </div>
+            <div class="lang-field">
+              <span class="lang-tag">EN</span>
+              <textarea class="table-input table-textarea" placeholder="Catchphrase (\\n = new line)"
+                onchange="updateMappingLang('book','${combo}','catchphrase','en',this.value)">${escHtml(catchEn)}</textarea>
+            </div>
+          </div>
+        </td>` : `<td></td><td></td>`}
         <td>
           <div class="table-img-cell">
             <img class="table-thumb${img ? "" : " hidden"}" src="${img}" />
@@ -266,7 +281,7 @@ function resultSection(groupId, label, data) {
 
   return `
     <tr class="section-header-row">
-      <td colspan="5"><span class="section-header-label">${label}</span></td>
+      <td colspan="6"><span class="section-header-label">${label}</span></td>
     </tr>
     ${rows}
   `;

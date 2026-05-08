@@ -354,6 +354,7 @@ tbody tr:last-child td { border-bottom: none; }
   transition: border-color 0.15s;
 }
 .table-input:focus { outline: none; border-color: #1a1a2e; }
+.table-textarea { resize: vertical; min-height: 60px; }
 
 .table-img-cell {
   display: flex;

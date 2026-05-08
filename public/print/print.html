@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Print</title>
-  <link rel="stylesheet" href="/print/print.css" />
+  <link rel="stylesheet" href="/print/print.css?v=6" />
 </head>
 <body>
 
@@ -43,7 +43,10 @@
 
   <!-- ROW 6: 3 stamp circles -->
   <section class="row row-circles">
-    <div class="circle"></div>
+    <div class="circle-wrap">
+      <img src="/img/print/stamp.png" class="stamp-overlay" />
+      <div class="circle"></div>
+    </div>
     <div class="circle"></div>
     <div class="circle"></div>
   </section>
@@ -67,6 +70,10 @@
     return val;
   }
 
+  function nl2br(str) {
+    return str.split('\\n').join('\n').split('\n').join('<br>');
+  }
+
   const deviceImg = document.getElementById("device-img");
   const bookImg   = document.getElementById("book-img");
 
@@ -76,12 +83,18 @@
       const device = (mapping.device || {})[deviceCode] || {};
       const book   = (mapping.book   || {})[bookCode]   || {};
 
-      const deviceTitle = getText(device.title);
-      const bookTitle   = getText(book.title);
-      const deviceDesc  = getText(device.description);
+      const deviceTitle     = getText(device.title);
+      const bookTitle       = getText(book.title);
+      const bookDescription = getText(book.description);
 
-      if (deviceTitle) document.getElementById("text2-device").textContent = deviceTitle;
-      if (bookTitle)   document.getElementById("text2-book").textContent   = bookTitle;
+      if (bookDescription) {
+        document.getElementById("text1").innerHTML = nl2br(bookDescription);
+      }
+      const bookCatchphrase = getText(book.catchphrase);
+
+      const deviceLine = deviceTitle + (bookCatchphrase ? ' ' + bookCatchphrase : '');
+      if (deviceLine) document.getElementById("text2-device").innerHTML = nl2br(deviceLine);
+      if (bookTitle)  document.getElementById("text2-book").textContent = bookTitle;
 
       const qrImg = document.querySelector(".qr-img");
 
