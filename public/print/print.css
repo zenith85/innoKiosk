@@ -10,73 +10,126 @@ html, body {
   height: 245mm;
   overflow: hidden;
   font-family: "Pretendard", sans-serif;
+  text-align: center;
 }
 
 .receipt {
   width: 80mm;
   height: 245mm;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Row base ── */
+.row {
+  width: 100%;
   text-align: center;
 }
 
-/* ELEMENT 1 */
-.header {
-  margin-bottom: 6mm;
+/* ROW 1 — Text 1 */
+.row-text1 {
+  padding: 3mm 3mm 2mm;
 }
 
-.subtitle {
-  font-size: 19px;
-  margin: 0 0 1.5mm;
-}
-
-.title {
-  font-size: 41px;
-  font-weight: 800;
-  line-height: 1.2;
+.row-text1 p {
   margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
-/* ELEMENT 2 */
-.device {
-  margin: 1mm 0;
+/* ROW 2 — Two images side by side */
+.row-images {
+  display: flex;
+  gap: 3mm;
+  padding: 2mm 3mm;
+  justify-content: center;
 }
 
-.device img {
-  max-height: 84mm;
-  max-width: 80mm;
+.img-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd;
+  border-radius: 2mm;
+  overflow: hidden;
+  height: 55mm;
+}
+
+.img-box img {
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
 }
 
-.device-name {
-  font-size: 29px;
+/* ROW 3 — Text 2 (device name + book title) */
+.row-text2 {
+  padding: 2mm 3mm;
+}
+
+.row-text2 p {
+  margin: 0 0 1mm;
+  font-size: 14px;
   font-weight: 700;
-  margin: 2.9mm 0 1.4mm;
+  line-height: 1.3;
 }
 
-.device-desc {
-  font-size: 20px;
-  line-height: 1.4;
+/* ROW 4 — QR code + Text 3 */
+.row-qr {
+  padding: 1mm 3mm 4mm;
+}
+
+.qr-img {
+  width: 15mm;
+  height: 15mm;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 4mm;
+}
+
+.row-qr p {
   margin: 0;
+  font-size: 16.5px;
+  line-height: 1.3;
+  color: #555;
 }
 
-/* ELEMENT 3 */
-.footer {
-  margin-top: 2mm;
+/* ROW 5 — STAMP! */
+.row-stamp {
+  padding: 1mm 0;
+}
+
+.stamp-word {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+/* ROW 6 — 3 circles */
+.row-circles {
+  display: flex;
+  justify-content: center;
+  gap: 4mm;
+  padding: 2mm 0;
+}
+
+.circle {
+  width: 21mm;
+  height: 21mm;
+  border-radius: 50%;
+  border: 1.5px solid #333;
+}
+
+/* ROW 7 — Logo */
+.row-logo {
+  padding: 2mm 0 3mm;
 }
 
 .logo {
-  height: 12mm;
-  margin-bottom: 2.9mm;
-}
-
-.qr img {
-  width: 78mm;
-  height: 78mm;
+  height: 18mm;
   object-fit: contain;
-}
-
-.qr p {
-  font-size: 16px;
-  margin: 2.2mm 0 0;
-  line-height: 1.3;
 }

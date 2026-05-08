@@ -9,27 +9,48 @@
 
 <div class="receipt">
 
-  <!-- ELEMENT 1: HEADER -->
-  <section class="header">
-    <p class="subtitle">국내 다양한 서점사업 이용이 가능한</p>
-    <h1 class="title">이노스페이스원<br/>이북리더기!</h1>
+  <!-- ROW 1: Text 1 -->
+  <section class="row row-text1">
+    <p id="text1">국내 다양한 서점사업 이용이 가능한 이노스페이스원 이북리더기!</p>
   </section>
 
-  <!-- ELEMENT 2: DEVICE (ONE ONLY) -->
-  <section class="device">
-    <img id="device-img" src="/img/print/luna.png" alt="device" />
-    <p id="device-name" class="device-name">LUNA</p>
-    <p id="device-desc" class="device-desc">
-      화이트 감성이 더해진<br/>6인치 루나
-    </p>
-  </section>
-
-  <!-- ELEMENT 3: FOOTER -->
-  <section class="footer">
-    <div class="qr">
-      <img src="/img/print/qr.png" />
-      <p>공식 홈페이지<br/>다양한 혜택받기</p>
+  <!-- ROW 2: Device image + Book cover image -->
+  <section class="row row-images">
+    <div class="img-box">
+      <img id="device-img" src="" alt="device" />
     </div>
+    <div class="img-box">
+      <img id="book-img" src="" alt="book" />
+    </div>
+  </section>
+
+  <!-- ROW 3: Text 2 -->
+  <section class="row row-text2">
+    <p id="text2-device"></p>
+    <p id="text2-book"></p>
+  </section>
+
+  <!-- ROW 4: QR code + Text 3 -->
+  <section class="row row-qr">
+    <img src="" class="qr-img" style="display:none" />
+    <p id="text3">공식 홈페이지에서 다양한 혜택받기</p>
+  </section>
+
+  <!-- ROW 5: STAMP! -->
+  <section class="row row-stamp">
+    <p class="stamp-word">STAMP!</p>
+  </section>
+
+  <!-- ROW 6: 3 stamp circles -->
+  <section class="row row-circles">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </section>
+
+  <!-- ROW 7: Logo -->
+  <section class="row row-logo">
+    <img src="/img/print/logo.png" class="logo" />
   </section>
 
 </div>
@@ -47,6 +68,7 @@
   }
 
   const deviceImg = document.getElementById("device-img");
+  const bookImg   = document.getElementById("book-img");
 
   fetch("/data/mapping.json")
     .then(r => r.json())
@@ -54,25 +76,51 @@
       const device = (mapping.device || {})[deviceCode] || {};
       const book   = (mapping.book   || {})[bookCode]   || {};
 
-      const title = getText(device.title);
-      const desc  = getText(device.description);
+      const deviceTitle = getText(device.title);
+      const bookTitle   = getText(book.title);
+      const deviceDesc  = getText(device.description);
 
-      if (title) document.getElementById("device-name").innerHTML = title;
-      if (desc)  document.getElementById("device-desc").innerHTML = desc;
+      if (deviceTitle) document.getElementById("text2-device").textContent = deviceTitle;
+      if (bookTitle)   document.getElementById("text2-book").textContent   = bookTitle;
+
+      const qrImg = document.querySelector(".qr-img");
+
+      let loaded = 0;
+      const total = (device.image ? 1 : 0) + (book.image ? 1 : 0) + (device.qr ? 1 : 0) || 1;
 
       const doprint = () => {
-        window.print();
-        window.onafterprint = () => { window.location.href = "/"; };
-        setTimeout(() => { window.location.href = "/"; }, 3000);
+        loaded++;
+        if (loaded >= total) {
+          window.print();
+          window.onafterprint = () => { window.location.href = "/"; };
+          setTimeout(() => { window.location.href = "/"; }, 3000);
+        }
       };
 
       if (device.image) {
-        deviceImg.onload = doprint;
+        deviceImg.onload  = doprint;
         deviceImg.onerror = doprint;
-        deviceImg.src = device.image;
+        deviceImg.src     = device.image;
       } else {
         deviceImg.style.display = "none";
-        doprint();
+      }
+
+      if (book.image) {
+        bookImg.onload  = doprint;
+        bookImg.onerror = doprint;
+        bookImg.src     = book.image;
+      } else {
+        bookImg.style.display = "none";
+      }
+
+      if (device.qr) {
+        qrImg.style.display = "block";
+        qrImg.onload  = doprint;
+        qrImg.onerror = doprint;
+        qrImg.src     = device.qr;
+      } else {
+        qrImg.style.display = "none";
+        if (!device.image && !book.image) doprint();
       }
     });
 </script>

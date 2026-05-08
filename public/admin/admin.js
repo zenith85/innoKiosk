@@ -199,6 +199,7 @@ function resultSection(groupId, label, data) {
   const rows = RESULT_COMBOS.map(combo => {
     const r = data[combo] || {};
     const img = r.image || "";
+    const qr  = r.qr    || "";
     const titleKo = getLang(r.title, 'ko');
     const titleEn = getLang(r.title, 'en');
     const descKo  = getLang(r.description, 'ko');
@@ -248,13 +249,24 @@ function resultSection(groupId, label, data) {
             ${img ? `<button class="btn-remove" onclick="removeMappingImage('${groupId}','${combo}')">✕</button>` : ""}
           </div>
         </td>
+        ${groupId === 'device' ? `
+        <td>
+          <div class="table-img-cell">
+            <img class="table-thumb${qr ? "" : " hidden"}" src="${qr}" />
+            <label class="btn-upload-small">Upload
+              <input type="file" accept="image/*"
+                onchange="uploadMappingQr('${combo}', this)" />
+            </label>
+            ${qr ? `<button class="btn-remove" onclick="removeMappingQr('${combo}')">✕</button>` : ""}
+          </div>
+        </td>` : `<td></td>`}
       </tr>
     `;
   }).join("");
 
   return `
     <tr class="section-header-row">
-      <td colspan="4"><span class="section-header-label">${label}</span></td>
+      <td colspan="5"><span class="section-header-label">${label}</span></td>
     </tr>
     ${rows}
   `;
@@ -274,6 +286,20 @@ function updateMappingLang(groupId, combo, field, langKey, val) {
 
 function removeMappingImage(groupId, combo) {
   updateMapping(groupId, combo, "image", "");
+  renderResults();
+}
+
+async function uploadMappingQr(combo, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const filePath = await uploadFile(file);
+  if (!filePath) return;
+  updateMapping("device", combo, "qr", filePath);
+  renderResults();
+}
+
+function removeMappingQr(combo) {
+  updateMapping("device", combo, "qr", "");
   renderResults();
 }
 
