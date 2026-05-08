@@ -84,11 +84,6 @@ app.post("/admin/api/mapping", (req, res) => {
   res.json({ ok: true });
 });
 
-app.get("/admin/api/stats", adminAuth, (req, res) => {
-  const statsPath = path.join(__dirname, "quiz_stats.json");
-  const stats = fs.existsSync(statsPath) ? JSON.parse(fs.readFileSync(statsPath)) : {};
-  res.json(stats);
-});
 
 app.get("/admin/api/result-stats", adminAuth, (req, res) => {
   const p = path.join(__dirname, "result_stats.json");
@@ -124,17 +119,6 @@ app.post("/admin/api/upload", adminAuth, upload.single("file"), (req, res) => {
 // ── Quiz API ──────────────────────────────────────────────
 app.post("/print", (req, res) => res.json({ ok: true }));
 
-app.post("/api/quiz-click", (req, res) => {
-  const statsPath = path.join(__dirname, "quiz_stats.json");
-  const { questionId, answerKey } = req.body;
-  if (!fs.existsSync(statsPath)) return res.json({ ok: true });
-  const stats = JSON.parse(fs.readFileSync(statsPath));
-  if (!stats[questionId]) stats[questionId] = {};
-  if (!stats[questionId][answerKey]) stats[questionId][answerKey] = 0;
-  stats[questionId][answerKey]++;
-  fs.writeFileSync(statsPath, JSON.stringify(stats, null, 2));
-  res.json({ ok: true });
-});
 
 app.listen(port, "0.0.0.0", () => {
   console.log("SERVER RUNNING ON PORT", port);

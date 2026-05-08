@@ -395,8 +395,34 @@ function toast(msg, isError = false) {
 }
 
 // ── Analysis ───────────────────────────────────────────────
+function deriveQuestionStats(resultStats) {
+  const stats = {};
+  state.groups.forEach(group => {
+    const comboCounts = resultStats[group.id] || {};
+    const rootId   = group.rootQuestion.id;
+    const branchAId = group.branchQuestions.A.id;
+    const branchBId = group.branchQuestions.B.id;
+    stats[rootId]    = {};
+    stats[branchAId] = {};
+    stats[branchBId] = {};
+    Object.keys(comboCounts).forEach(combo => {
+      const count       = comboCounts[combo] || 0;
+      const rootAnswer  = combo[0];
+      const branchAnswer = combo[1];
+      stats[rootId][rootAnswer]    = (stats[rootId][rootAnswer]    || 0) + count;
+      if (rootAnswer === 'A') {
+        stats[branchAId][branchAnswer] = (stats[branchAId][branchAnswer] || 0) + count;
+      } else {
+        stats[branchBId][branchAnswer] = (stats[branchBId][branchAnswer] || 0) + count;
+      }
+    });
+  });
+  return stats;
+}
+
 async function renderAnalysis() {
-  const stats = await fetch("/admin/api/stats").then(r => r.json());
+  const resultStats = await fetch("/admin/api/result-stats").then(r => r.json());
+  const stats = deriveQuestionStats(resultStats);
 
   Object.values(analysisCharts).forEach(c => c.destroy());
   analysisCharts = {};
@@ -422,7 +448,7 @@ async function renderAnalysis() {
                 <span class="analysis-label">${label}</span>
                 <span class="analysis-total">${total} responses</span>
               </div>
-              <p class="analysis-question">${escHtml(getLang(q.text, 'ko'))}</p>
+              <p class="analysis-question">${escHtml(getLang(q.text, 'ko').replace(/\\n|\n/g, ' '))}</p>
               <div class="analysis-chart-wrap">
                 <canvas id="chart-${q.id}"></canvas>
               </div>
@@ -442,8 +468,9 @@ async function renderAnalysis() {
       const total   = choices.reduce((a, k) => a + (qStats[k] || 0), 0);
       const labels  = choices.map(k => {
         const pct  = total ? Math.round((qStats[k] || 0) / total * 100) : 0;
-        const text = getLang(q.choices[k].label, 'ko') || k;
-        return `${k}: ${text}  (${pct}%)`;
+        const text = (getLang(q.choices[k].label, 'ko') || k).replace(/\\n|\n/g, ' ');
+        const trimmed = text.length > 18 ? text.slice(0, 18) + '…' : text;
+        return `${k}: ${trimmed}  (${pct}%)`;
       });
       const data = choices.map(k => qStats[k] || 0);
 
@@ -455,16 +482,42 @@ async function renderAnalysis() {
         },
         options: {
           indexAxis: 'y',
-          plugins: { legend: { display: false } },
+          plugins: {
+            legend: { display: false },
+            datalabels: {
+              anchor: 'end', align: 'end',
+              color: '#333',
+              font: { weight: 'bold', size: 12 },
+              formatter: v => v > 0 ? v : ''
+            }
+          },
           scales: {
             x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f0f0f0' } },
             y: { grid: { display: false } }
           }
-        }
+        },
+        plugins: [ChartDataLabels]
       });
     });
   });
 }
+
+const centerTotalPlugin = {
+  id: 'centerTotal',
+  afterDraw(chart) {
+    const { ctx, chartArea } = chart;
+    const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+    const cx = (chartArea.left + chartArea.right) / 2;
+    const cy = (chartArea.top + chartArea.bottom) / 2;
+    ctx.save();
+    ctx.font = 'bold 24px sans-serif';
+    ctx.fillStyle = '#222';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(total, cx, cy);
+    ctx.restore();
+  }
+};
 
 async function renderResultCharts() {
   const resultStats = await fetch("/admin/api/result-stats").then(r => r.json());
@@ -496,9 +549,19 @@ async function renderResultCharts() {
       },
       options: {
         plugins: {
-          legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } }
+          legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } },
+          datalabels: {
+            color: '#fff',
+            font: { weight: 'bold', size: 13 },
+            formatter: (v, ctx) => {
+              const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              const pct = total ? Math.round(v / total * 100) : 0;
+              return v > 0 ? `${pct}%` : '';
+            }
+          }
         }
-      }
+      },
+      plugins: [ChartDataLabels, centerTotalPlugin]
     });
   });
 }
@@ -509,10 +572,8 @@ document.getElementById("btn-refresh-analysis").addEventListener("click", () => 
 });
 
 document.getElementById("btn-export-excel").addEventListener("click", async () => {
-  const [stats, resultStats] = await Promise.all([
-    fetch("/admin/api/stats").then(r => r.json()),
-    fetch("/admin/api/result-stats").then(r => r.json())
-  ]);
+  const resultStats = await fetch("/admin/api/result-stats").then(r => r.json());
+  const stats = deriveQuestionStats(resultStats);
 
   const wb = XLSX.utils.book_new();
 

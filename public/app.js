@@ -114,11 +114,6 @@ function answer(key) {
     ? group.rootQuestion.id
     : group.branchQuestions[firstAnswerKey].id;
 
-  fetch("/api/quiz-click", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ questionId, answerKey: key })
-  });
 
   if (currentStep === 0) {
     firstAnswerKey = key;
