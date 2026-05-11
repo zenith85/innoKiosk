@@ -3,8 +3,8 @@
     {
       "id": "device",
       "label": {
-        "ko": "기기 추천",
-        "en": "Device Recommendation"
+        "ko": "책 추천",
+        "en": "Book Recommendation"
       },
       "rootQuestion": {
         "id": "DQ1",
@@ -95,8 +95,8 @@
     {
       "id": "book",
       "label": {
-        "ko": "책 추천",
-        "en": "Book Recommendation"
+        "ko": "기기 추천",
+        "en": "Device Recommendation"
       },
       "rootQuestion": {
         "id": "BQ1",
@@ -126,7 +126,7 @@
           "id": "BQ2A",
           "text": {
             "ko": "하나를 사도\\n똑똑하게 사는 게 좋은데...",
-            "en": "If I’m buying one, it better be smart."
+            "en": "If I'm buying one, it better be smart."
           },
           "choices": {
             "A": {
@@ -156,7 +156,7 @@
           "id": "BQ2B",
           "text": {
             "ko": "하나를 사도\\n똑똑하게 사는 게 좋은데...",
-            "en": "If I’m buying one, it better be smart."
+            "en": "If I'm buying one, it better be smart."
           },
           "choices": {
             "A": {
