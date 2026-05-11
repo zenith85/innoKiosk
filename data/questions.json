@@ -1,7 +1,7 @@
 {
   "groups": [
     {
-      "id": "device",
+      "id": "book",
       "label": {
         "ko": "책 추천",
         "en": "Book Recommendation"
@@ -93,7 +93,7 @@
       }
     },
     {
-      "id": "book",
+      "id": "device",
       "label": {
         "ko": "기기 추천",
         "en": "Device Recommendation"
