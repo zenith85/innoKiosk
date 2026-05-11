@@ -1,0 +1,188 @@
+{
+  "groups": [
+    {
+      "id": "device",
+      "label": {
+        "ko": "기기 추천",
+        "en": "Device Recommendation"
+      },
+      "rootQuestion": {
+        "id": "DQ1",
+        "text": {
+          "ko": "한가한 주말 오후,\\n 여유롭게 책 한 권 읽어볼까요?",
+          "en": "A chill weekend afternoon, want to read a book?"
+        },
+        "choices": {
+          "A": {
+            "label": {
+              "ko": "가볍고 편하게 \\n 읽을 수 있는 책이 좋아",
+              "en": "I like light, easy reads."
+            },
+            "image": "/img/uploads/1777882553145.png"
+          },
+          "B": {
+            "label": {
+              "ko": "한 번 읽어도 깊게\\n빠져들 수 있는 책이 좋아",
+              "en": "I like books that pull me in fast."
+            },
+            "image": "/img/uploads/1777883063468.png"
+          }
+        }
+      },
+      "branchQuestions": {
+        "A": {
+          "id": "DQ2A",
+          "text": {
+            "ko": "이야기가 먼저 펼쳐지는 책이 좋다면,\\n어떤 결말이 더 좋아요?",
+            "en": "If you like story-driven books, what kind of ending do you prefer?"
+          },
+          "choices": {
+            "A": {
+              "label": {
+                "ko": "잔잔한 문장과 여운이 남는 이야기",
+                "en": "Calm writing with a lasting feel."
+              },
+              "image": ""
+            },
+            "B": {
+              "label": {
+                "ko": "속도감 있게 쭉 읽히는 이야기",
+                "en": "Fast-paced and easy to binge."
+              },
+              "image": ""
+            },
+            "C": {
+              "label": {
+                "ko": "낯설고 새로운 분위기의 이야기",
+                "en": "Something fresh and different."
+              },
+              "image": ""
+            }
+          }
+        },
+        "B": {
+          "id": "DQ2B",
+          "text": {
+            "ko": "깊게 몰입할 수 있는 책이 좋다면,\\n어떤 생각에 빠져볼까요?",
+            "en": "If you want something immersive, what mood are you after?"
+          },
+          "choices": {
+            "A": {
+              "label": {
+                "ko": "고요하게 삶을 돌아보는 깨달음",
+                "en": "Quiet reflection on life."
+              },
+              "image": ""
+            },
+            "B": {
+              "label": {
+                "ko": "내 감정을 깊게 들여다보는 시간",
+                "en": "A deep dive into my feelings."
+              },
+              "image": ""
+            },
+            "C": {
+              "label": {
+                "ko": "세상을 다르게 보게 되는 통찰",
+                "en": "A new way to see the world."
+              },
+              "image": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "book",
+      "label": {
+        "ko": "책 추천",
+        "en": "Book Recommendation"
+      },
+      "rootQuestion": {
+        "id": "BQ1",
+        "text": {
+          "ko": "읽다 보니 책 한 권 뚝딱!\\n이참에 이북리더기 하나 들여봐?",
+          "en": "Finished a book already? Maybe grab an e-reader."
+        },
+        "choices": {
+          "A": {
+            "label": {
+              "ko": "일단 휴대성이 좋아야지?\\n6인치 미만으로 살래",
+              "en": "Portability first, under 6 inches."
+            },
+            "image": "/img/uploads/1777882581135.png"
+          },
+          "B": {
+            "label": {
+              "ko": "책이랑 크기가 비슷해야지!\\n7인치 이상이 좋아",
+              "en": "Closer to book size, 7 inches or more."
+            },
+            "image": "/img/uploads/1777882582646.png"
+          }
+        }
+      },
+      "branchQuestions": {
+        "A": {
+          "id": "BQ2A",
+          "text": {
+            "ko": "하나를 사도\\n똑똑하게 사는 게 좋은데...",
+            "en": "If I’m buying one, it better be smart."
+          },
+          "choices": {
+            "A": {
+              "label": {
+                "ko": "핸디함이 최고인 바형",
+                "en": "Phone-style, super portable."
+              },
+              "image": ""
+            },
+            "B": {
+              "label": {
+                "ko": "가성비가 최고템",
+                "en": "The best value-for-money pick."
+              },
+              "image": ""
+            },
+            "C": {
+              "label": {
+                "ko": "인기 많은 입문템",
+                "en": "A popular beginner-friendly pick."
+              },
+              "image": ""
+            }
+          }
+        },
+        "B": {
+          "id": "BQ2B",
+          "text": {
+            "ko": "하나를 사도\\n똑똑하게 사는 게 좋은데...",
+            "en": "If I’m buying one, it better be smart."
+          },
+          "choices": {
+            "A": {
+              "label": {
+                "ko": "컬러 기기가 최고야",
+                "en": "Color screens are better."
+              },
+              "image": ""
+            },
+            "B": {
+              "label": {
+                "ko": "역시 기기는 최신형이지",
+                "en": "Newer is better."
+              },
+              "image": ""
+            },
+            "C": {
+              "label": {
+                "ko": "펜 있는 모델이 좋아",
+                "en": "I prefer a model with a pen."
+              },
+              "image": ""
+            }
+          }
+        }
+      }
+    }
+  ]
+}

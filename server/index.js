@@ -9,6 +9,21 @@ const app = express();
 const uploadsDir = path.join(__dirname, "..", "public", "img", "uploads");
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
+const dataDir = path.join(__dirname, "..", "data");
+if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+const dataDefaults = {
+  "questions.json": { groups: [] },
+  "mapping.json":   { device: {}, book: {} },
+  "theme.json":     {}
+};
+Object.entries(dataDefaults).forEach(([file, def]) => {
+  const p = path.join(dataDir, file);
+  if (!fs.existsSync(p)) fs.writeFileSync(p, JSON.stringify(def, null, 2));
+});
+if (!fs.existsSync(path.join(__dirname, "result_stats.json"))) {
+  fs.writeFileSync(path.join(__dirname, "result_stats.json"), JSON.stringify({ device: {}, book: {} }, null, 2));
+}
+
 const storage = multer.diskStorage({
   destination: uploadsDir,
   filename: (req, file, cb) => {

@@ -1,0 +1,144 @@
+{
+  "device": {
+    "AA": {
+      "title": {
+        "ko": "Comet",
+        "en": "Comet"
+      },
+      "image": "/img/uploads/1778031273422.png",
+      "qr": "/img/uploads/1778222108634.png"
+    },
+    "AB": {
+      "title": {
+        "ko": "Luna2",
+        "en": "Luna2"
+      },
+      "image": "/img/uploads/1778031276911.png",
+      "qr": "/img/uploads/1778222112825.png"
+    },
+    "AC": {
+      "title": {
+        "ko": "Luna X2",
+        "en": "Luna X2"
+      },
+      "image": "/img/uploads/1778031279536.png",
+      "qr": "/img/uploads/1778222116325.png"
+    },
+    "BA": {
+      "title": {
+        "ko": "Jigu",
+        "en": "Jigu"
+      },
+      "image": "/img/uploads/1778031285954.png",
+      "qr": "/img/uploads/1778222119536.png"
+    },
+    "BB": {
+      "title": {
+        "ko": "Mars A",
+        "en": "Mars A"
+      },
+      "image": "/img/uploads/1778031289037.png",
+      "qr": "/img/uploads/1778222122411.png"
+    },
+    "BC": {
+      "title": {
+        "ko": "Mars X",
+        "en": "Mars X"
+      },
+      "image": "/img/uploads/1778206162522.png",
+      "qr": "/img/uploads/1778222125244.png"
+    }
+  },
+  "book": {
+    "AA": {
+      "title": {
+        "ko": "우리가 길이라 부르는 말설임",
+        "en": "What we call a road is trouble"
+      },
+      "description": {
+        "ko": "당신은 여운 산책형 독자! ",
+        "en": ""
+      },
+      "catchphrase": {
+        "ko": "과 함께 '우리가 길이라 부르는 망설임'의 여운을 천천히 즐겨보세요.",
+        "en": ""
+      },
+      "image": "/img/uploads/1778028733689.jpg"
+    },
+    "AB": {
+      "title": {
+        "ko": "급류",
+        "en": "Rapids"
+      },
+      "description": {
+        "ko": "당신은 속도 몰입형 독자! ",
+        "en": ""
+      },
+      "catchphrase": {
+        "ko": "과 함께 '급류'의 이야기 속으로 단숨에 빠져들어보세요.",
+        "en": ""
+      },
+      "image": "/img/uploads/1778028726071.jpg"
+    },
+    "AC": {
+      "title": {
+        "ko": "다나",
+        "en": "Dana"
+      },
+      "description": {
+        "ko": "당신은 낯선 길 탐험형 독자! ",
+        "en": ""
+      },
+      "catchphrase": {
+        "ko": "과 함께 '다나'의 신비로운 세계를 탐험해보세요.",
+        "en": "과 함께 '급류'의 이야기 속으로 단숨에 빠져들어보세요."
+      },
+      "image": "/img/uploads/1778028723142.jpg"
+    },
+    "BA": {
+      "title": {
+        "ko": "싯다르타",
+        "en": "Siddhartha"
+      },
+      "description": {
+        "ko": "당신은 고요한 사색형 독자! ",
+        "en": ""
+      },
+      "catchphrase": {
+        "ko": "과 함께 '싯다르타'의 문장을 음미해보세요",
+        "en": ""
+      },
+      "image": "/img/uploads/1778028709908.jpg"
+    },
+    "BB": {
+      "title": {
+        "ko": "인간실격",
+        "en": "No Longer Human"
+      },
+      "description": {
+        "ko": "당신은 내면 응시형 독자! ",
+        "en": ""
+      },
+      "catchphrase": {
+        "ko": "과 함께 '인간실격'의 감정을 마주해보세요.",
+        "en": ""
+      },
+      "image": "/img/uploads/1778028715260.jpg"
+    },
+    "BC": {
+      "title": {
+        "ko": "디에센셜 조지오웰",
+        "en": "The Essential George Orwell"
+      },
+      "description": {
+        "ko": "당신은 관점 환기형 독자! ",
+        "en": ""
+      },
+      "catchphrase": {
+        "ko": "과 함께 '디에센셜 조지오웰'의 관점을 넓혀보세요.",
+        "en": ""
+      },
+      "image": "/img/uploads/1778028718592.jpg"
+    }
+  }
+}
