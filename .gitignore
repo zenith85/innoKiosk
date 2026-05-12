@@ -1,3 +1,7 @@
 node_modules/
 .env
 .env.*
+
+# Ignore video files but keep the folder
+public/video/*
+!public/video/.gitkeep
