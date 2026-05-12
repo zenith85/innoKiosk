@@ -65,6 +65,9 @@ function showLanguageSelect() {
     <div class="screen lang-screen" id="lang-screen">
       <div class="lang-content">
         <img src="/img/logo.png" class="lang-logo" />
+        <p class="lang-subtitle">알고 보면 더 재미있는 독서 스타일!</p>
+        <p class="lang-title">당신에게 딱 맞는<br>책과 이북리더기는?!</p>
+        <img src="/img/Frontpage.png" class="lang-frontpage" />
         <div class="lang-buttons">
           <button class="btn-lang" onclick="selectLang('ko')">한국어</button>
           <button class="btn-lang" onclick="selectLang('en')">English</button>
