@@ -131,6 +131,21 @@ app.post("/admin/api/upload", adminAuth, upload.single("file"), (req, res) => {
   res.json({ path: `/img/uploads/${req.file.filename}` });
 });
 
+// ── Video list ────────────────────────────────────────────
+app.get("/api/videos", (req, res) => {
+  const videoDir = path.join(__dirname, "..", "public", "video");
+  const exts = [".mp4", ".webm", ".ogg"];
+  try {
+    const files = fs.readdirSync(videoDir)
+      .filter(f => exts.includes(path.extname(f).toLowerCase()))
+      .sort()
+      .map(f => `/video/${f}`);
+    res.json(files);
+  } catch (e) {
+    res.json([]);
+  }
+});
+
 // ── Quiz API ──────────────────────────────────────────────
 app.post("/print", (req, res) => res.json({ ok: true }));
 

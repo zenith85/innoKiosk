@@ -38,12 +38,31 @@ async function loadData() {
   const data = await fetch("/data/questions.json").then(r => r.json());
   groups  = data.groups;
   mapping = await fetch("/data/mapping.json").then(r => r.json());
+  await fetchVideoPlaylist();
   showLanguageSelect();
 }
 
+let idleTimer = null;
+
+function clearIdleTimer() {
+  if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+}
+
+let videoPlaylist = [];
+let videoIndex = 0;
+
+async function fetchVideoPlaylist() {
+  try {
+    videoPlaylist = await fetch("/api/videos").then(r => r.json());
+  } catch (e) {
+    videoPlaylist = [];
+  }
+}
+
 function showLanguageSelect() {
+  clearIdleTimer();
   app.innerHTML = `
-    <div class="screen lang-screen">
+    <div class="screen lang-screen" id="lang-screen">
       <div class="lang-content">
         <img src="/img/logo.png" class="lang-logo" />
         <div class="lang-buttons">
@@ -51,11 +70,39 @@ function showLanguageSelect() {
           <button class="btn-lang" onclick="selectLang('en')">English</button>
         </div>
       </div>
+      <div id="video-overlay" class="video-overlay hidden">
+        <video id="idle-video" muted playsinline></video>
+      </div>
     </div>
   `;
+
+  idleTimer = setTimeout(() => {
+    if (!videoPlaylist.length) return;
+    const overlay = document.getElementById("video-overlay");
+    const video   = document.getElementById("idle-video");
+    if (!overlay || !video) return;
+    overlay.classList.remove("hidden");
+    videoIndex = 0;
+    video.src = videoPlaylist[videoIndex];
+    video.play().catch(() => {});
+    video.addEventListener("ended", function onEnded() {
+      videoIndex = (videoIndex + 1) % videoPlaylist.length;
+      video.src = videoPlaylist[videoIndex];
+      video.play().catch(() => {});
+    });
+  }, 10000);
+
+  document.getElementById("lang-screen").addEventListener("click", (e) => {
+    const overlay = document.getElementById("video-overlay");
+    if (overlay && !overlay.classList.contains("hidden")) {
+      e.stopPropagation();
+      showLanguageSelect();
+    }
+  }, { capture: true });
 }
 
 function selectLang(l) {
+  clearIdleTimer();
   lang = l;
   currentGroupIdx = 0;
   currentStep = 0;
