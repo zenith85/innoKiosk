@@ -43,9 +43,19 @@ async function loadData() {
 }
 
 let idleTimer = null;
+let idleEnabled = localStorage.getItem("idleEnabled") !== "false";
 
 function clearIdleTimer() {
   if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+}
+
+function toggleIdle() {
+  idleEnabled = !idleEnabled;
+  localStorage.setItem("idleEnabled", idleEnabled);
+  const input = document.getElementById("idle-toggle-input");
+  if (input) input.checked = idleEnabled;
+  clearIdleTimer();
+  if (idleEnabled) startIdleTimer();
 }
 
 let videoPlaylist = [];
@@ -57,6 +67,26 @@ async function fetchVideoPlaylist() {
   } catch (e) {
     videoPlaylist = [];
   }
+}
+
+function startIdleTimer() {
+  if (!idleEnabled || !videoPlaylist.length) return;
+  idleTimer = setTimeout(() => {
+    const overlay = document.getElementById("video-overlay");
+    const video   = document.getElementById("idle-video");
+    const toggle  = document.getElementById("idle-switch-wrap");
+    if (!overlay || !video) return;
+    if (toggle) toggle.style.display = "none";
+    overlay.classList.remove("hidden");
+    videoIndex = 0;
+    video.src = videoPlaylist[videoIndex];
+    video.play().catch(() => {});
+    video.addEventListener("ended", function onEnded() {
+      videoIndex = (videoIndex + 1) % videoPlaylist.length;
+      video.src = videoPlaylist[videoIndex];
+      video.play().catch(() => {});
+    });
+  }, 10000);
 }
 
 function showLanguageSelect() {
@@ -73,27 +103,20 @@ function showLanguageSelect() {
           <button class="btn-lang" onclick="selectLang('en')">English</button>
         </div>
       </div>
+      <div id="idle-switch-wrap" class="idle-switch-wrap">
+        <span class="idle-switch-label">Idle</span>
+        <label class="idle-switch">
+          <input type="checkbox" id="idle-toggle-input" onchange="toggleIdle()" ${idleEnabled ? 'checked' : ''}>
+          <span class="idle-switch-slider"></span>
+        </label>
+      </div>
       <div id="video-overlay" class="video-overlay hidden">
         <video id="idle-video" muted playsinline></video>
       </div>
     </div>
   `;
 
-  idleTimer = setTimeout(() => {
-    if (!videoPlaylist.length) return;
-    const overlay = document.getElementById("video-overlay");
-    const video   = document.getElementById("idle-video");
-    if (!overlay || !video) return;
-    overlay.classList.remove("hidden");
-    videoIndex = 0;
-    video.src = videoPlaylist[videoIndex];
-    video.play().catch(() => {});
-    video.addEventListener("ended", function onEnded() {
-      videoIndex = (videoIndex + 1) % videoPlaylist.length;
-      video.src = videoPlaylist[videoIndex];
-      video.play().catch(() => {});
-    });
-  }, 10000);
+  startIdleTimer();
 
   document.getElementById("lang-screen").addEventListener("click", (e) => {
     const overlay = document.getElementById("video-overlay");

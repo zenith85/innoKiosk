@@ -450,6 +450,72 @@ body {
 }
 
 /* ============================================================
+   IDLE TOGGLE SWITCH
+   ============================================================ */
+
+.idle-switch-wrap {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 20;
+  opacity: 0.5;
+}
+
+.idle-switch-wrap:hover { opacity: 1; }
+
+.idle-switch-label {
+  font-size: 22px;
+  font-family: "GmarketSans", sans-serif;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.idle-switch {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 44px;
+  cursor: pointer;
+}
+
+.idle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.idle-switch-slider {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 44px;
+  transition: background 0.25s;
+}
+
+.idle-switch-slider::before {
+  content: "";
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  left: 5px;
+  top: 5px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.25s;
+}
+
+.idle-switch input:checked + .idle-switch-slider {
+  background: #2d6a4f;
+}
+
+.idle-switch input:checked + .idle-switch-slider::before {
+  transform: translateX(36px);
+}
+
+/* ============================================================
    VIDEO IDLE OVERLAY
    ============================================================ */
 
