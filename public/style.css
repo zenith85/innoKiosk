@@ -133,6 +133,26 @@ body {
   filter: brightness(0.9);
 }
 
+.btn-lang-single,
+.btn-lang-single:last-child {
+  background: var(--choice-bg-1);
+}
+
+.front-title {
+  font-size: 120px;
+  margin-top: 10px;
+}
+
+.front-img {
+  flex: 1;
+  min-height: 0;
+  width: 80%;
+  object-fit: contain;
+  object-position: top;
+  margin-top: 120px;
+  margin-bottom: -20px;
+}
+
 /* Old top header — hidden, logo moved to bottom */
 .top {
   display: none;

@@ -39,7 +39,7 @@ async function loadData() {
   groups  = data.groups;
   mapping = await fetch("/data/mapping.json").then(r => r.json());
   await fetchVideoPlaylist();
-  showLanguageSelect();
+  showFrontPage();
 }
 
 let idleTimer = null;
@@ -89,18 +89,16 @@ function startIdleTimer() {
   }, 10000);
 }
 
-function showLanguageSelect() {
+function showFrontPage() {
   clearIdleTimer();
   app.innerHTML = `
-    <div class="screen lang-screen" id="lang-screen">
+    <div class="screen lang-screen" id="front-screen">
       <div class="lang-content">
         <img src="/img/logo.png" class="lang-logo" />
-        <p class="lang-subtitle">알고 보면 더 재미있는 독서 스타일!</p>
-        <p class="lang-title">당신에게 딱 맞는<br>책과 이북리더기는?!</p>
-        <img src="/img/Frontpage.png" class="lang-frontpage" />
+        <p class="lang-title front-title">콜라보 굿즈 받아가세요!</p>
+        <img src="/img/FirstView.png" class="front-img" />
         <div class="lang-buttons">
-          <button class="btn-lang" onclick="selectLang('ko')">한국어</button>
-          <button class="btn-lang" onclick="selectLang('en')">English</button>
+          <button class="btn-lang btn-lang-single" onclick="showLanguageSelect()">테스트 후 굿즈받기</button>
         </div>
       </div>
       <div id="idle-switch-wrap" class="idle-switch-wrap">
@@ -118,13 +116,31 @@ function showLanguageSelect() {
 
   startIdleTimer();
 
-  document.getElementById("lang-screen").addEventListener("click", (e) => {
+  document.getElementById("front-screen").addEventListener("click", (e) => {
     const overlay = document.getElementById("video-overlay");
     if (overlay && !overlay.classList.contains("hidden")) {
       e.stopPropagation();
-      showLanguageSelect();
+      showFrontPage();
     }
   }, { capture: true });
+}
+
+function showLanguageSelect() {
+  clearIdleTimer();
+  app.innerHTML = `
+    <div class="screen lang-screen">
+      <div class="lang-content">
+        <img src="/img/logo.png" class="lang-logo" />
+        <p class="lang-subtitle">알고 보면 더 재미있는 독서 스타일!</p>
+        <p class="lang-title">당신에게 딱 맞는<br>책과 이북리더기는?!</p>
+        <img src="/img/LanguagePage.png" class="lang-frontpage" />
+        <div class="lang-buttons">
+          <button class="btn-lang" onclick="selectLang('ko')">한국어</button>
+          <button class="btn-lang" onclick="selectLang('en')">English</button>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function selectLang(l) {
@@ -257,7 +273,7 @@ function printResult(deviceCode, bookCode) {
 }
 
 function reset() {
-  showLanguageSelect();
+  showFrontPage();
 }
 
 loadData();
