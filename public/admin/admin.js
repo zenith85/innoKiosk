@@ -16,6 +16,20 @@ const THEME_LABELS = {
   btnSecondaryText: "Secondary Button Text"
 };
 
+const THEME_DEFAULTS = {
+  bg:               "#f4efe9",
+  text:             "#111111",
+  choiceBg:         "#14233b",
+  choiceBg1:        "#14233b",
+  choiceBg2:        "#1a2e4a",
+  choiceBg3:        "#0f1a2e",
+  choiceText:       "#ffffff",
+  btnPrimaryBg:     "#14233b",
+  btnPrimaryText:   "#ffffff",
+  btnSecondaryBg:   "#e6e6e6",
+  btnSecondaryText: "#111111"
+};
+
 const RESULT_COMBOS = ["AA","AB","AC","BA","BB","BC"];
 
 // ── Init ───────────────────────────────────────────────────
@@ -358,7 +372,7 @@ function renderTheme() {
 
   const grid = document.getElementById("theme-grid");
   grid.innerHTML = Object.entries(THEME_LABELS).map(([key, label]) => {
-    const val = state.theme[key] || "#ffffff";
+    const val = state.theme[key] || THEME_DEFAULTS[key] || "#ffffff";
     return `
       <div class="theme-card">
         <div class="theme-swatch" style="background:${val}">
