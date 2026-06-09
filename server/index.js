@@ -2,6 +2,7 @@ const express = require("express");
 const path    = require("path");
 const fs      = require("fs");
 const multer  = require("multer");
+const AdmZip  = require("adm-zip");
 const { port, adminPassword } = require("./config");
 
 const app = express();
@@ -129,6 +130,47 @@ app.post("/admin/api/theme", (req, res) => {
 app.post("/admin/api/upload", adminAuth, upload.single("file"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file" });
   res.json({ path: `/img/uploads/${req.file.filename}` });
+});
+
+// ── Export setup ─────────────────────────────────────────
+app.get("/admin/api/export", adminAuth, (req, res) => {
+  const zip = new AdmZip();
+  const dataFiles = ["mapping.json", "questions.json", "theme.json"];
+  dataFiles.forEach(file => {
+    const p = path.join(dataDir, file);
+    if (fs.existsSync(p)) zip.addLocalFile(p, "data/");
+  });
+  if (fs.existsSync(uploadsDir)) {
+    fs.readdirSync(uploadsDir).forEach(file => {
+      zip.addLocalFile(path.join(uploadsDir, file), "uploads/");
+    });
+  }
+  const buf = zip.toBuffer();
+  res.setHeader("Content-Disposition", "attachment; filename=kiosk-setup.zip");
+  res.setHeader("Content-Type", "application/zip");
+  res.send(buf);
+});
+
+// ── Import setup ─────────────────────────────────────────
+const importUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 200 * 1024 * 1024 } });
+app.post("/admin/api/import", adminAuth, importUpload.single("file"), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: "No file" });
+  try {
+    const zip = new AdmZip(req.file.buffer);
+    zip.getEntries().forEach(entry => {
+      if (entry.isDirectory) return;
+      const name = entry.name;
+      if (entry.entryName.startsWith("data/") && name.endsWith(".json")) {
+        fs.writeFileSync(path.join(dataDir, name), entry.getData());
+      } else if (entry.entryName.startsWith("uploads/")) {
+        if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+        fs.writeFileSync(path.join(uploadsDir, name), entry.getData());
+      }
+    });
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to extract zip" });
+  }
 });
 
 // ── Video list ────────────────────────────────────────────

@@ -25,6 +25,13 @@
           <span class="nav-icon">📊</span> Analysis
         </button>
       </nav>
+      <div class="sidebar-transfer">
+        <button class="btn-transfer" id="btn-export-setup">⬇ Export Setup</button>
+        <label class="btn-transfer btn-import-label">
+          ⬆ Import Setup
+          <input type="file" accept=".zip" id="import-file-input" style="display:none" onchange="importSetup(this)" />
+        </label>
+      </div>
     </aside>
 
     <main class="content">

@@ -640,6 +640,26 @@ document.getElementById("btn-export-excel").addEventListener("click", async () =
   XLSX.writeFile(wb, `kiosk-stats-${date}.xlsx`);
 });
 
+// ── Export / Import ────────────────────────────────────────
+document.getElementById("btn-export-setup").addEventListener("click", () => {
+  window.location.href = "/admin/api/export";
+});
+
+async function importSetup(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const form = new FormData();
+  form.append("file", file);
+  const res = await fetch("/admin/api/import", { method: "POST", body: form });
+  if (res.ok) {
+    toast("Import successful — reloading...");
+    setTimeout(() => location.reload(), 1200);
+  } else {
+    toast("Import failed", true);
+  }
+  input.value = "";
+}
+
 // ── Utils ──────────────────────────────────────────────────
 function escHtml(str) {
   return String(str)
