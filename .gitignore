@@ -5,3 +5,8 @@ node_modules/
 # Ignore video files but keep the folder
 public/video/*
 !public/video/.gitkeep
+
+# Per-machine content managed via admin page
+data/mapping.json
+data/questions.json
+public/img/uploads/
