@@ -344,6 +344,18 @@ document.getElementById("btn-save-results").addEventListener("click", async () =
 
 // ── Theme ──────────────────────────────────────────────────
 function renderTheme() {
+  const img = state.theme.frontImage || "";
+  document.getElementById("theme-front-image").innerHTML = `
+    <div class="theme-section-label">Front Page Image</div>
+    <div class="table-img-cell">
+      <img class="table-thumb${img ? "" : " hidden"}" id="front-img-preview" src="${img}" />
+      <label class="btn-upload-small">Upload
+        <input type="file" accept="image/*" onchange="uploadFrontImage(this)" />
+      </label>
+      ${img ? `<button class="btn-remove" onclick="removeFrontImage()">✕ Remove</button>` : ""}
+    </div>
+  `;
+
   const grid = document.getElementById("theme-grid");
   grid.innerHTML = Object.entries(THEME_LABELS).map(([key, label]) => {
     const val = state.theme[key] || "#ffffff";
@@ -360,6 +372,20 @@ function renderTheme() {
       </div>
     `;
   }).join("");
+}
+
+async function uploadFrontImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const filePath = await uploadFile(file);
+  if (!filePath) return;
+  state.theme.frontImage = filePath;
+  renderTheme();
+}
+
+function removeFrontImage() {
+  state.theme.frontImage = "";
+  renderTheme();
 }
 
 function updateThemeColor(key, val, input) {

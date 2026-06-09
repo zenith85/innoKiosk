@@ -1,5 +1,6 @@
 let groups = [];
 let mapping = {};
+let theme = {};
 let lang = "ko";
 let currentGroupIdx = 0;
 let currentStep = 0;
@@ -17,7 +18,7 @@ function getText(val) {
 
 async function applyTheme() {
   try {
-    const theme = await fetch("/data/theme.json").then(r => r.json());
+    theme = await fetch("/data/theme.json").then(r => r.json());
     const root = document.documentElement;
     if (theme.bg)               root.style.setProperty("--bg", theme.bg);
     if (theme.text)             root.style.setProperty("--text", theme.text);
@@ -96,7 +97,7 @@ function showFrontPage() {
       <div class="lang-content">
         <img src="/img/logo.png" class="lang-logo" />
         <p class="lang-title front-title">콜라보 굿즈 받아가세요!</p>
-        <img src="/img/FirstView.png" class="front-img" />
+        ${theme.frontImage ? `<img src="${theme.frontImage}" class="front-img" />` : ''}
         <div class="lang-buttons">
           <button class="btn-lang btn-lang-single" onclick="showLanguageSelect()">테스트 후 굿즈받기</button>
         </div>

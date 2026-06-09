@@ -9,4 +9,5 @@ public/video/*
 # Per-machine content managed via admin page
 data/mapping.json
 data/questions.json
+data/theme.json
 public/img/uploads/
