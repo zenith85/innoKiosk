@@ -96,10 +96,10 @@ function showFrontPage() {
     <div class="screen lang-screen" id="front-screen">
       <div class="lang-content">
         <img src="/img/logo.png" class="lang-logo" />
-        <p class="lang-title front-title">콜라보 굿즈 받아가세요!</p>
+        <p class="lang-title front-title">${theme.frontTitle || '콜라보 굿즈 받아가세요!'}</p>
         ${theme.frontImage ? `<img src="${theme.frontImage}" class="front-img" />` : ''}
         <div class="lang-buttons">
-          <button class="btn-lang btn-lang-single" onclick="showLanguageSelect()">테스트 후 굿즈받기</button>
+          <button class="btn-lang btn-lang-single" onclick="showLanguageSelect()">${theme.frontButtonText || '테스트 후 굿즈받기'}</button>
         </div>
       </div>
       <div id="idle-switch-wrap" class="idle-switch-wrap">

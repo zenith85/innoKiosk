@@ -368,6 +368,20 @@ function renderTheme() {
       </label>
       ${img ? `<button class="btn-remove" onclick="removeFrontImage()">✕ Remove</button>` : ""}
     </div>
+    <div class="theme-text-fields">
+      <div class="theme-text-field">
+        <label class="theme-section-label">Text under logo</label>
+        <input class="theme-text-input" type="text" placeholder="콜라보 굿즈 받아가세요!"
+          value="${escHtml(state.theme.frontTitle || '')}"
+          oninput="state.theme.frontTitle = this.value" />
+      </div>
+      <div class="theme-text-field">
+        <label class="theme-section-label">Button text</label>
+        <input class="theme-text-input" type="text" placeholder="테스트 후 굿즈받기"
+          value="${escHtml(state.theme.frontButtonText || '')}"
+          oninput="state.theme.frontButtonText = this.value" />
+      </div>
+    </div>
   `;
 
   const grid = document.getElementById("theme-grid");
