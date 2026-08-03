@@ -21,6 +21,9 @@
         <button class="nav-btn" data-tab="theme">
           <span class="nav-icon">🎨</span> Theme
         </button>
+        <button class="nav-btn" data-tab="videos">
+          <span class="nav-icon">🎬</span> Idle Video
+        </button>
         <button class="nav-btn" data-tab="analysis">
           <span class="nav-icon">📊</span> Analysis
         </button>
@@ -91,6 +94,20 @@
         </div>
         <div class="theme-front-image" id="theme-front-image"></div>
         <div class="theme-grid" id="theme-grid"></div>
+      </div>
+
+      <!-- IDLE VIDEO TAB -->
+      <div id="tab-videos" class="tab">
+        <div class="tab-header">
+          <div>
+            <h1>Idle Video</h1>
+            <p class="tab-desc">Videos that play on screen when the kiosk is idle. Check the ones you want in the loop, upload new ones, or delete ones you don't need.</p>
+          </div>
+          <div class="tab-actions">
+            <button class="btn-save" id="btn-save-videos">Save Changes</button>
+          </div>
+        </div>
+        <div class="video-grid" id="videos-grid"></div>
       </div>
 
       <!-- ANALYSIS TAB -->

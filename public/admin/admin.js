@@ -1,5 +1,5 @@
 // ── State ──────────────────────────────────────────────────
-let state = { groups: [], mapping: { device: {}, book: {} }, theme: {} };
+let state = { groups: [], mapping: { device: {}, book: {} }, theme: {}, videos: [] };
 let analysisCharts = {};
 
 const THEME_LABELS = {
@@ -38,9 +38,11 @@ async function init() {
   state.groups  = data.questions.groups || [];
   state.mapping = data.mapping || { device: {}, book: {} };
   state.theme   = data.theme   || {};
+  state.videos  = await fetch("/admin/api/videos").then(r => r.json());
   renderQuestions();
   renderResults();
   renderTheme();
+  renderVideos();
   renderAnalysis();
   renderResultCharts();
 }
@@ -429,6 +431,72 @@ document.getElementById("btn-save-theme").addEventListener("click", async () => 
     body: JSON.stringify(state.theme)
   });
   res.ok ? toast("Theme saved") : toast("Save failed", true);
+});
+
+// ── Idle Video ─────────────────────────────────────────────
+function renderVideos() {
+  const grid = document.getElementById("videos-grid");
+  grid.innerHTML = `
+    <label class="video-upload-tile">
+      <span class="video-upload-plus">+</span>
+      <span>Upload Video</span>
+      <input type="file" accept="video/mp4,video/webm,video/ogg" class="upload-input" onchange="uploadVideo(this)" />
+    </label>
+    ${state.videos.map((v, i) => videoCard(v, i)).join("")}
+  `;
+}
+
+function videoCard(v, i) {
+  return `
+    <div class="video-card">
+      <video class="video-preview" src="${v.url}" muted preload="metadata" controls></video>
+      <div class="video-card-body">
+        <div class="video-filename" title="${escHtml(v.filename)}">${escHtml(v.filename)}</div>
+        <label class="video-check">
+          <input type="checkbox" ${v.enabled ? "checked" : ""} onchange="toggleVideoEnabled(${i}, this.checked)" />
+          Show in idle loop
+        </label>
+      </div>
+      <button class="btn-remove-img" onclick="deleteVideo(${i})">✕ Delete</button>
+    </div>
+  `;
+}
+
+function toggleVideoEnabled(i, checked) {
+  state.videos[i].enabled = checked;
+}
+
+async function uploadVideo(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const form = new FormData();
+  form.append("file", file);
+  const res = await fetch("/admin/api/videos/upload", { method: "POST", body: form });
+  if (!res.ok) { toast("Upload failed", true); input.value = ""; return; }
+  const data = await res.json();
+  state.videos.push({ filename: data.filename, url: data.url, enabled: true });
+  renderVideos();
+  toast("Video uploaded");
+}
+
+async function deleteVideo(i) {
+  const v = state.videos[i];
+  if (!confirm(`Delete "${v.filename}"? This cannot be undone.`)) return;
+  const res = await fetch(`/admin/api/videos/${encodeURIComponent(v.filename)}`, { method: "DELETE" });
+  if (!res.ok) { toast("Delete failed", true); return; }
+  state.videos.splice(i, 1);
+  renderVideos();
+  toast("Video deleted");
+}
+
+document.getElementById("btn-save-videos").addEventListener("click", async () => {
+  const enabled = state.videos.filter(v => v.enabled).map(v => v.filename);
+  const res = await fetch("/admin/api/videos/enabled", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ enabled })
+  });
+  res.ok ? toast("Idle video settings saved") : toast("Save failed", true);
 });
 
 // ── Upload helper ──────────────────────────────────────────
