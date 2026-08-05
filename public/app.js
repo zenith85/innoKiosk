@@ -40,6 +40,7 @@ async function loadData() {
   groups  = data.groups;
   mapping = await fetch("/data/mapping.json").then(r => r.json());
   await fetchVideoPlaylist();
+  subscribeVideoUpdates();
   showFrontPage();
 }
 
@@ -68,6 +69,15 @@ async function fetchVideoPlaylist() {
   } catch (e) {
     videoPlaylist = [];
   }
+}
+
+function subscribeVideoUpdates() {
+  const source = new EventSource("/api/videos/stream");
+  source.onmessage = () => fetchVideoPlaylist();
+  source.onerror = () => {
+    source.close();
+    setTimeout(subscribeVideoUpdates, 5000);
+  };
 }
 
 function startIdleTimer() {

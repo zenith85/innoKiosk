@@ -227,6 +227,25 @@ app.get("/api/videos", (req, res) => {
   res.json(files.map(f => `/video/${f}`));
 });
 
+// ── Video playlist change notifications (SSE) ──────────────
+const videoUpdateClients = [];
+app.get("/api/videos/stream", (req, res) => {
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    "Connection": "keep-alive"
+  });
+  res.write("\n");
+  videoUpdateClients.push(res);
+  req.on("close", () => {
+    const i = videoUpdateClients.indexOf(res);
+    if (i !== -1) videoUpdateClients.splice(i, 1);
+  });
+});
+function broadcastVideoUpdate() {
+  for (const client of videoUpdateClients) client.write("data: refresh\n\n");
+}
+
 // ── Admin: idle video management ───────────────────────────
 app.get("/admin/api/videos", adminAuth, (req, res) => {
   const enabledSet = new Set(readVideoConfig().enabled || []);
@@ -243,6 +262,7 @@ app.post("/admin/api/videos/upload", adminAuth, uploadVideo.single("file"), (req
   config.enabled = config.enabled || [];
   config.enabled.push(req.file.filename);
   writeVideoConfig(config);
+  broadcastVideoUpdate();
   res.json({ filename: req.file.filename, url: `/video/${req.file.filename}` });
 });
 
@@ -250,6 +270,7 @@ app.post("/admin/api/videos/enabled", adminAuth, (req, res) => {
   const { enabled } = req.body;
   if (!Array.isArray(enabled)) return res.status(400).json({ error: "enabled must be an array" });
   writeVideoConfig({ enabled });
+  broadcastVideoUpdate();
   res.json({ ok: true });
 });
 
@@ -260,6 +281,7 @@ app.delete("/admin/api/videos/:filename", adminAuth, (req, res) => {
   const config = readVideoConfig();
   config.enabled = (config.enabled || []).filter(f => f !== filename);
   writeVideoConfig(config);
+  broadcastVideoUpdate();
   res.json({ ok: true });
 });
 
